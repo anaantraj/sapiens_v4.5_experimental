@@ -1,0 +1,92 @@
+{
+  "main_categories": {
+    "Appliances": [
+      "Appliances",
+      "All Electronics",
+      "Amazon Home",
+      "Automotive",
+      "Camera & Photo",
+      "Car Electronics",
+      "Cell Phones & Accessories",
+      "Tools & Home Improvement",
+      "Industrial & Scientific",
+      "Office Products"
+    ],
+    "All Beauty": [
+      "All Beauty",
+      "Premium Beauty"
+    ],
+    "Digital Music": [
+      "Digital Music",
+      "Musical Instruments",
+      "Home Audio & Theater",
+      "Portable Audio & Accessories"
+    ],
+    "Video Games": [
+      "Video Games",
+      "Movies & TV",
+      "Toys & Games"
+    ],
+    "Health & Personal Care": [
+      "Health & Personal Care",
+      "Baby",
+      "Grocery",
+      "Sports & Outdoors"
+    ],
+    "Software": [
+      "Software",
+      "Appstore for Android",
+      "Computers",
+      "Buy a Kindle"
+    ],
+    "Clothing Shoes & Jewelry": [
+      "AMAZON FASHION",
+      "Arts, Crafts & Sewing",
+      "Books"
+    ]
+  },
+  "category_to_main_mapping": {
+    "Appliances": "Appliances",
+    "All Electronics": "Appliances",
+    "Amazon Home": "Appliances",
+    "Automotive": "Appliances",
+    "Camera & Photo": "Appliances",
+    "Car Electronics": "Appliances",
+    "Cell Phones & Accessories": "Appliances",
+    "Tools & Home Improvement": "Appliances",
+    "Industrial & Scientific": "Appliances",
+    "Office Products": "Appliances",
+    "All Beauty": "All Beauty",
+    "Premium Beauty": "All Beauty",
+    "Digital Music": "Digital Music",
+    "Musical Instruments": "Digital Music",
+    "Home Audio & Theater": "Digital Music",
+    "Portable Audio & Accessories": "Digital Music",
+    "Video Games": "Video Games",
+    "Movies & TV": "Video Games",
+    "Toys & Games": "Video Games",
+    "Health & Personal Care": "Health & Personal Care",
+    "Baby": "Health & Personal Care",
+    "Grocery": "Health & Personal Care",
+    "Sports & Outdoors": "Health & Personal Care",
+    "Software": "Software",
+    "Appstore for Android": "Software",
+    "Computers": "Software",
+    "Buy a Kindle": "Software",
+    "AMAZON FASHION": "Clothing Shoes & Jewelry",
+    "Arts, Crafts & Sewing": "Clothing Shoes & Jewelry",
+    "Books": "Clothing Shoes & Jewelry"
+  },
+  "review_counts_by_main_category": {
+    "Software": 6225,
+    "Appliances": 5701,
+    "Health & Personal Care": 2635,
+    "Clothing Shoes & Jewelry": 4907,
+    "All Beauty": 3871,
+    "Video Games": 3573,
+    "Digital Music": 2521
+  },
+  "unmapped_categories": []
+}
+
+
