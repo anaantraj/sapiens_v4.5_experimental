@@ -1,0 +1,135 @@
+stage: "07_sgo_training"
+method: "sapiens_goal_optimization_delta_refinement"
+
+# Model ID when using AWS Bedrock (OPENAI_BASE_URL set).
+# Used only for non-logprob LLM paths in this stage.
+bedrock_model_id: "openai.gpt-oss-120b"
+
+# Dataset Configuration
+dataset_type: "train"  # "train" or "test" - determines which input artifacts to use
+
+# Final Predictions Mode Configuration
+# Options: "final_train" (with memory) or "final_train_chars" (with memory + refined characteristics)
+final_predictions_mode: "final_train"  # Mode for final predictions script
+
+# Characteristics Mode Configuration
+# Options: "refined" (load from refined characteristics files) or "seed" (use original qualitative_summary from tribe_seed)
+# NOTE: Always using "seed" mode - we have user chars, category chars, memory, and seed backstory, so refined_chars not needed
+characteristics_mode: "seed"  # Always use seed - refined_chars removed
+
+# Input/Output Artifacts
+# All input artifacts should reference outputs from previous stages
+# NO LOCAL FALLBACKS - everything must be downloaded from W&B
+input_artifacts:
+  # From Stage 07: SGO Training (initial predictions)
+  # For train: use initial predictions from 07_sgo_training
+  # For test: use test predictions from 07_sgo_training
+  initial_predictions_train: "pre_sgo_results_v3:latest"  # W&B artifact name for initial predictions
+  initial_predictions_test: "Test_Prediction_Accuracy_v4:latest"  # From 07_sgo_training (test predictions)
+  
+  # From Stage 06: Tribe Formation
+  tribe_seed_characteristics: "tribe_seed_characteristics_v3:latest"  # From 06_tribe_formation (Script 03)
+  
+  # From Stage 05: User Level Inference
+  user_backstories: "user_backstory_v3:latest"  # From 05_user_level_inference
+  
+  # From Stage 03: Topic Universe
+  topic_universe: "topic_universe_final_v3:latest"  # From 03_topic_universe
+  
+  # REQUIRED: Category mapping artifact (must be from W&B)
+  category_mapping: "category_mapping_to_7_main:latest"  # Category mapping artifact (REQUIRED - no fallback)
+  
+  # For main.py (test mode): SGO training results (contains memory, user chars, category chars, tribe chars)
+  sgo_training_results_for_main: "sgo_training_results_V3:latest"  # SGO training results artifact for main.py test mode (memory, characteristics)
+  
+  # For final_predictions.py and final_predictions_refined_chars.py: SGO training results (contains memory, user chars, category chars, tribe chars)
+  sgo_training_results: "sgo_training_results_V3:latest"  # SGO training results artifact for final predictions scripts (memory, characteristics)
+  
+  # For test mode: Test micro cluster details
+  test_micro_cluster_details: "test_micro_cluster_details:latest"  # Test micro cluster details artifact
+  ground_truth_test_micro_cluster_details: "ground_truth_test_micro_cluster_details:latest"  # Ground truth test micro cluster details
+  # For train mode: Ground truth train micro cluster details (folder structure)
+  ground_truth_train_micro_cluster_details_converted: "ground_truth_train_micro_cluster_details_converted:latest"  # Ground truth train micro cluster details (folder structure similar to predictions)
+
+# Output Artifacts
+output_artifacts:
+  sgo_training_results: "sgo_training_results_v3_sample"  # Corrected predictions with delta refinement
+  initial_deltas: "initial_deltas_v3_sample"  # Initial predictions with deltas (JSD for themes, cosine for text)
+
+# Output Configuration
+output:
+  stage: "07_sgo_training"  # Stage directory where artifacts should be saved (saves in artifacts folder of this stage)
+
+# File Patterns (for finding files within artifacts)
+file_patterns:
+  tribe_seed_characteristics: "tribe_seed_characteristics.json"  # From 06_tribe_formation
+  user_backstories: "user_overall_characteristics.json"  # From 05_user_level_inference
+  topic_universe: "topic_universe.json"  # From 03_topic_universe
+  category_mapping: "category_mapping.json"  # Optional artifact
+
+# Prompt Configuration
+prompt:
+  directory: "prompts"  # Relative to stage directory
+  part_a_batch: "part_a_batch_prompt.txt"  # Correction prompt
+  part_b_batch: "part_b_batch_prompt.txt"  # Analysis prompt
+
+# Scoring Mode Configuration
+# Options: "confidence", "logprobs", or "logprobs-without-persona-context"
+# - "confidence": Model outputs confidence scores directly in JSON (default, faster)
+# - "logprobs": Generate review first, then get logprobs for each theme separately with full persona context (more accurate, slower)
+# - "logprobs-without-persona-context": Generate review with full context, then classify themes using ONLY product_description + review_text (no persona context)
+scoring_mode: "logprobs"
+
+# Model Configuration (all configurable)
+# Model for generating review text (Step 1 in logprobs mode, or Part A in confidence mode)
+review_prediction_model: "o3"  # Model for text generation and review prediction
+# Model for theme classification with logprobs (Step 2 in logprobs mode only)
+theme_prediction_model: "gpt-4o-mini"  # Model for topic classification with logprobs
+# Bedrock model for theme classification with logprobs (used when OPENAI_BASE_URL is Bedrock)
+logprobs_model_id: "openai.gpt-oss-120b"
+# Model for feedback loop analysis (Part B - failure analysis and motive identification)
+feedback_loop_model: "gpt-5.2"  # Model for Part B batch analysis (feedback loop) - uses responses.create API
+
+# Schema Configuration
+schema:
+  version: "v6"
+
+# Hyperparameters
+# ALL parameters must be specified here - no hardcoded values in scripts
+hyperparameters:
+  # Model configuration
+  embedding_model: "text-embedding-3-small"  # Embedding model name
+  # Note: analysis_model is deprecated - use review_prediction_model, theme_prediction_model, and feedback_loop_model instead
+  # Kept for backward compatibility with confidence mode
+  analysis_model: "gpt-5-mini"  # Fallback for confidence mode (deprecated - use review_prediction_model instead)
+  min_request_interval: 0.1  # Minimum seconds between embedding requests
+  
+  # Model-specific parameters (only applied for non-o3 models)
+  max_tokens: 2000  # Only used for gpt-4o, gpt-4-turbo, etc. (o3 doesn't use this)
+  temperature: 0.7  # Only used for gpt-4o, gpt-4-turbo, etc. (o3 doesn't use this)
+  top_logprobs: 20  # Number of top logprobs to return for theme classification (higher = better chance of finding both yes/no tokens)
+  
+  # Delta refinement parameters
+  num_iterations: 12  # Number of refinement iterations
+  batch_size: 5  # Batch size for parallel processing
+  delta_threshold: 0.3  # Theme delta threshold for correction (stopping criteria: theme_delta <= threshold)
+  weight_text_delta: 0.7  # Weight for text delta in overall delta calculation
+  weight_theme_delta: 0.3  # Weight for theme delta in overall delta calculation
+  
+  # Parallel processing
+  max_parallel_batches: 3  # Maximum concurrent batches
+  max_parallel_embeddings: 10  # Maximum concurrent embedding calculations
+  parallel_batches: true  # Enable parallel batch processing
+  parallel_embeddings: true  # Enable parallel embedding calculations
+  
+  # API rate limiting
+  api_rate_limit_delay: 0.5  # Delay between API calls (seconds)
+  
+  # LLM retry configuration
+  max_retries: 3  # Maximum retries for LLM API calls
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Sapiens Model"
+artifact_type: "model"
+job_type: "training"

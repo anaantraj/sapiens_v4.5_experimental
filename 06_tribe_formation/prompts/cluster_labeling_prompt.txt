@@ -1,0 +1,43 @@
+**Task: Cluster/Tribe Labeling**
+
+You are generating a descriptive label and summary for a user cluster (tribe).
+
+**INPUT:**
+- Cluster ID: {cluster_id}
+- Users in cluster: {user_count}
+- Sample user characteristics: {sample_characteristics}
+- Common topics: {common_topics}
+- Average ratings: {avg_ratings}
+
+**INSTRUCTIONS:**
+
+1. Analyze the common characteristics of users in this cluster
+2. Generate a descriptive persona name
+3. Create a summary that captures the essence of this tribe
+4. Identify key differentiators from other clusters
+
+**LABELING CRITERIA:**
+- Name should be memorable and descriptive (2-4 words)
+- Summary should explain who these users are
+- Identify what makes this cluster unique
+
+**OUTPUT FORMAT:**
+Return a JSON object:
+```json
+{
+  "cluster_id": "{cluster_id}",
+  "persona_name": "Descriptive Name",
+  "persona_summary": "2-3 sentence summary of this tribe",
+  "key_characteristics": ["char1", "char2", "char3"],
+  "typical_behavior": {
+    "review_style": "description",
+    "rating_tendency": "description",
+    "topic_focus": ["topic1", "topic2"]
+  },
+  "differentiators": ["what makes this cluster unique"],
+  "size": {user_count}
+}
+```
+
+**CLUSTER DATA:**
+{cluster_data}

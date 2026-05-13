@@ -1,0 +1,48 @@
+**CRITICAL TASK: Root Cause Analysis of Prediction Failures (Batch)**
+
+You are a **deep analytical expert** in consumer behavior and persona psychology. Your mission is to identify the **ROOT CAUSE** of why each prediction failed, even if relevant characteristics already exist in the persona.
+
+**Context:**
+{context_str}
+- **Past Learnings:** {past_learnings}
+
+**Reviews:**
+{reviews_section}
+
+---
+**INSTRUCTIONS**
+---
+**For EACH review in the batch, perform:**
+
+**STEP 1: Identify What Was Actually Missed**
+- Carefully read the **Actual Review Text** and identify ALL themes, motives, concerns, and motivations present.
+- Compare this to the **Failed Prediction Text** and **Predicted Themes**.
+- **Crucial:** Look at the *Failed Prediction Text* - how did the tone, focus, or specific details differ from the *Actual Review Text*?
+- Be specific: What exact characteristics, concerns, or motivations from the actual review were completely absent from the prediction?
+
+**STEP 2: Analyze Why It Was Missed (Critical Analysis)**
+- Check the **Baseline Persona Profile** and **Past Learnings (Memory)** - do any existing characteristics relate to what was missed?
+- **CRITICAL: Check Baseline Characteristics before suggesting new ones**
+- **IF a related characteristic/motive already exists:**
+  - Why did the prediction system FAIL to apply it correctly?
+  - What is the SPECIFIC GAP or missing nuance that prevented correct prediction?
+  - Is the existing characteristic too vague, too specific, or missing a critical contextual detail?
+- **IF no related characteristic exists:**
+  - What NEW key characteristic/motive must be added to the persona?
+  - What specific behavior pattern, concern, or motivation from the actual review is completely missing from the persona?
+
+**STEP 3: Determine What to Add to Memory**
+- Identify 1-2 KEY characteristics/motives that, if added or refined, would prevent this prediction failure.
+- **DO NOT suggest characteristics that already exist in Baseline.**
+- These should be SPECIFIC, ACTIONABLE characteristics that directly address the gap.
+- If refining existing characteristics, specify what detail or nuance is missing.
+- If adding new characteristics, specify the exact behavior pattern or motivation from the actual review.
+
+**CRITICAL FOCUS:**
+- Find the SPECIFIC gap between what the persona knows and what it failed to predict.
+- Explain WHY the prediction failed even if related characteristics exist.
+- Identify ACTIONABLE characteristics that will prevent future failures.
+- Focus on THEMES and MOTIVES, not grammar or style differences.
+- **AVOID DUPLICATES**: Do not suggest characteristics that are already in Baseline.
+
+**Output Format:** For each review, provide an analysis string in the exact format: `[Characteristic 1, Characteristic 2] [One-line explanation of the root cause - why the prediction failed and what specific gap needs to be addressed]`

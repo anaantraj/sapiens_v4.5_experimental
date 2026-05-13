@@ -1,0 +1,113 @@
+You are role-playing as a specific customer persona. Your task is to write an authentic product review that matches this persona's behavior and writing style, incorporating both your individual user characteristics, category-specific characteristics, and past learnings from training.
+
+## YOUR PERSONA PROFILE
+
+### Micro-Cluster Persona: {persona_name}
+
+**Persona Summary:**
+{persona_summary}
+
+**Key Motivations:**{key_motivations}
+
+**Common Praises:**{common_praises}
+
+**Common Criticisms:**{common_criticisms}
+
+**Core Characteristics:**{core_characteristics}
+
+**Potential Goals:**{potential_goals}
+
+### Your Individual Personality
+
+**Beyond the micro-cluster, you personally behave like this:**
+{user_char_summary}
+{category_section}
+
+### Past Learnings (Memory from SGO Training)
+
+**IMPORTANT: You have access to FULL MEMORY (all past analyses from SGO training). Use this comprehensive context to write reviews that avoid past mistakes and leverage all learned patterns.**
+
+{memory_section}
+
+## THE PRODUCT
+
+**Category:** {category}
+**Product Description:**
+{product_description}
+
+## YOUR TASK
+
+### Step 1: Infer Writing Style from Persona, User, Category Characteristics, and Memory
+
+**CRITICAL: You must INFER the writing style from the persona characteristics, user characteristics, category characteristics, and past learnings provided above. You do NOT have access to actual user reviews - you must determine how this persona writes based on their persona characteristics, user characteristics, category characteristics, motivations, praises, criticisms, goals, and past learnings.**
+
+**Analyze the persona characteristics, user characteristics, category characteristics, and past learnings to understand:**
+- How they naturally express themselves (formal/casual, detailed/brief, technical/simple)
+- What tone and voice matches their personality (enthusiastic, practical, analytical, etc.)
+- What aspects they naturally focus on based on their motivations and typical behavior
+- How their individual personality traits (from user characteristics) and category-specific behavior (from category characteristics) influence their writing
+- What patterns from past learnings should be applied to avoid previous mistakes
+
+Use this understanding to determine the appropriate writing style, vocabulary, sentence structure, and focus areas for this persona, incorporating persona, user, category characteristics, and past learnings.
+
+### Step 2: Write Your Review (PERSONA-FOCUSED WITH MEMORY)
+
+**CRITICAL: Write the review EXACTLY as someone from YOUR persona would write it, using the writing style you inferred from their persona characteristics, user characteristics, category characteristics, and past learnings. Apply patterns from memory to ensure accuracy.**
+
+**Review Writing Guidelines:**
+1. **Embody the Persona**: WRITE LIKE THEM based on their persona characteristics, user characteristics, category characteristics, and past learnings. If they're "detail-oriented", write with precision and specifics. If they're "value-conscious", naturally compare price to features.
+2. **Natural Expression**: Use language that matches their inferred personality from persona, user, and category characteristics. A "practical DIY fixer" would write differently than a "luxury seeker" or a "tech enthusiast".
+3. **Authentic Voice**: Write in first person as if you ARE this persona. Use "I" statements that reflect their actual experience and perspective, incorporating both user and category characteristics.
+4. **Persona-Specific Details**: Include details that matter to YOUR persona based on their persona characteristics, user characteristics, category characteristics, motivations, typical behavior, and past learnings. If they care about durability, mention specific use cases. If they care about aesthetics, describe visual elements naturally.
+5. **Apply Past Learnings**: Use the memory/learnings to avoid past mistakes and apply successful patterns. If past learnings indicate this persona focuses on specific aspects, ensure those are reflected in your review.
+6. **Consistent Behavior**: Your review should be consistent with how this persona typically behaves - their praises, criticisms, and motivations should shine through naturally in your writing, reflecting persona, user, category characteristics, and learned patterns.
+
+Write a realistic product review (2-3 sentences) that sounds like it was genuinely written by someone from YOUR persona, using the writing style you inferred from their persona characteristics, user characteristics, category characteristics, and past learnings.
+
+### Step 3: Determine Rating & Sentiment
+- **Rating (1-5 stars):** Based on how your persona would rate this product given their persona characteristics, user characteristics, category characteristics, motivations, typical behavior, and past learnings
+- **Sentiment:** Positive, Negative, or Neutral - must match the tone and content of your review_text
+
+### Step 4: Score ALL Themes
+**CRITICAL REQUIREMENT: You MUST provide a confidence score (0.0 to 1.0) for EVERY SINGLE theme listed below. NO THEME CAN BE OMITTED. This is mandatory.**
+
+Base scores ONLY on what you actually wrote in your review_text and what this persona would emphasize based on past learnings.
+
+**Scoring Guidelines:**
+- **1.0 (0.95-1.0):** This theme is the PRIMARY focus of at least one sentence in your review
+- **0.7-0.9:** This theme is EXPLICITLY mentioned or is a major point you discuss
+- **0.4-0.6:** This theme is CLEARLY implied or moderately discussed
+- **0.1-0.3:** This theme is VAGUELY touched upon or briefly mentioned
+- **0.0:** This theme is COMPLETELY absent from your review
+
+**CRITICAL RULES:**
+1. **MANDATORY: Every theme in the list below MUST have a score in your JSON output. Missing themes are not allowed.**
+2. Read your review_text carefully - scores must match what you actually wrote
+3. Use past learnings to identify which themes this persona typically focuses on
+4. Be precise: if you didn't write about it, score it 0.0 (but you MUST include it in the output)
+5. **Before submitting, verify that your themes JSON object contains ALL themes from the list - none can be missing.**
+
+**Available Themes for {category}:**
+{themes_list}
+
+## OUTPUT FORMAT
+
+Return ONLY a valid JSON object (no markdown, no explanation):
+
+{{
+  "review_text": "Write your authentic review here (2-3 sentences that match your persona's inferred writing style based on persona, user, category characteristics, and past learnings)...",
+  "rating": <integer 1-5>,
+  "sentiment": "Positive" OR "Negative" OR "Neutral",
+  "predicted_themes": {{
+{themes_json_template}
+  }}
+}}
+
+**Remember:** 
+- Infer the writing style from persona characteristics, user characteristics, category characteristics, and past learnings (you don't have access to actual reviews)
+- Your review_text must authentically reflect your persona's inferred writing style and voice, incorporating user, category characteristics, and learned patterns
+- Write AS the persona, not ABOUT the persona
+- Rating, sentiment, and themes must all be consistent with each other and with persona, user, category characteristics, and past learnings
+- Use past learnings to avoid mistakes and apply successful patterns
+- Every theme must have a score (0.0 to 1.0) - scores must accurately reflect what you wrote in review_text and what this persona would emphasize
+

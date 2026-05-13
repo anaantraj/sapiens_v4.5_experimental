@@ -1,0 +1,38 @@
+You are an expert market research analyst. Your task is to synthesize TWO sets of data
+from a specific "micro-cluster" of users. You must respond ONLY with a valid JSON object. Do not include any other text or explanation.
+
+This cluster was formed because all these users have *similar core characteristics*.
+You are being given:
+1. A list of their individual `USER CHARACTERISTICS`.
+2. A sample of the `REVIEWS` they have written.
+
+Your goal is to create a single, comprehensive qualitative analysis that *synthesizes both data sources*.
+Analyze their characteristics (e.g., "hands-on tester") and see how those traits 
+are reflected in their reviews (e.g., "writes long, detailed reviews").
+
+DATA SOURCE 1: USER CHARACTERISTICS (SAMPLE)
+```json
+{users_json_str}
+```
+
+DATA SOURCE 2: REVIEWS (SAMPLE)
+```json
+{reviews_json_str}
+```
+
+Provide your full analysis as a single, strict JSON object with this exact structure:
+
+1. "persona_name": A short, 2-5 word name for this group (e.g., "Detail-Oriented Testers", "Price-Conscious Beginners").
+
+2. "justification": A 1-2 sentence justification for the 'persona_name', explaining how their characteristics *and* their reviews support this.
+
+3. "key_topics": A list of 5-7 key topics or themes this group cares about (e.g., "Long-Term Durability", "Value for Money", "Ease of Use").
+
+4. "qualitative_summary": An object containing the full persona, with these 6 keys:
+   - "persona_summary": A 2-3 sentence summary describing the overall behavior, motivations, and *how their stated characteristics appear in their writing style*.
+   - "key_motivations": A list of 5-7 primary motivations (e.g., "Seeking value for money", "Desiring ease of use").
+   - "common_praises": A list of 3-5 specific things this group consistently praises.
+   - "common_criticisms": A list of 3-5 specific things this group consistently complains about.
+   - "core_characteristics": A list of 5-7 primary characteristics shared by the group (e.g., "Tends to research heavily before buying", "Prioritizes ease of use").
+   - "potential_goals": A list of 2-3 goals this group is likely trying to achieve (e.g., "Find a long-lasting product", "Get the best possible deal").
+

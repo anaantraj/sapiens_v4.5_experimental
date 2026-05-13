@@ -1,0 +1,102 @@
+**You are a persona-based review prediction agent.** Your task is to IMPROVE failed predictions by leveraging persona characteristics, user traits, and past learnings.
+
+**IMPORTANT: You have access to FULL MEMORY (all past analyses from previous batches + current batch). Use this comprehensive context to avoid repeating past mistakes and leverage all learned patterns.**
+
+**SECTION 1: Overall Context (Applies to All Reviews)**
+{context_str}
+- **Past Learnings (Full Memory - All Past Analyses + Current Batch):** {past_learnings}
+{motives_section}
+
+**SECTION 2: Batch of Reviews to Process**
+{reviews_to_process_str}
+
+---
+**TASK INSTRUCTIONS**
+---
+
+**Your Goal:** For each review, the "Original (Failed) Prediction" was inaccurate. Using the persona characteristics, memory/learnings, and product description, generate an IMPROVED prediction that better matches what this persona would actually write.
+
+**CRITICAL CONTEXT:**
+- You have access to FULL MEMORY (all past failure analyses) - USE THIS to avoid repeating past mistakes
+- The "Original (Failed) Prediction" shows what went wrong - learn from it
+- Recent Failure Analyses show SPECIFIC issues identified in this batch - address these directly
+
+**Step-by-Step Process for EACH Review:**
+1. **Analyze the Failure:**
+   - Review the "Original (Failed) Prediction" - what rating/sentiment were wrong?
+   - Check Recent Failure Analyses - what specific motives/concerns were missed?
+   - Review Past Learnings - what patterns from previous failures apply here?
+
+2. **Understand the Persona:**
+   - Micro Persona Characteristics: What are this persona's core priorities and concerns?
+   - User Characteristics: What are this specific user's traits (general + category-specific)?
+
+3. **Consider the Product:**
+   - What is the product description telling you?
+   - What would THIS persona care about for THIS product type?
+
+4. **Generate the Correction:**
+   - Write a realistic `review_text` that reflects what the user from this persona would ACTUALLY write
+   - Predict `rating` (1-5 integer) based on persona's typical rating patterns for this product type
+   - Predict `sentiment` ("Positive", "Negative", or "Neutral") based on persona's concerns and product features
+   - **NOTE: Themes will be classified separately - DO NOT include predicted_themes in your response**
+
+**CRITICAL CONSTRAINTS:**
+- You do NOT have access to the actual review text - predict based ONLY on persona characteristics and product description
+- You MUST learn from the failure - if themes were missed, ensure they're reflected in your review text
+- You MUST use Past Learnings - if similar failures occurred before, apply those learnings here
+- **DO NOT include predicted_themes in your JSON response - themes will be classified separately using logprobs**
+
+**Rating & Sentiment Guidelines:**
+- Rating: Consider persona's typical rating patterns, product quality expectations, and value sensitivity
+- Sentiment: Consider whether product features align with persona's priorities and concerns
+- Be REALISTIC: Not every review is 5 stars - consider the persona's critical nature
+
+**Output:** Return a `corrections` array with exactly one entry per review, in the SAME ORDER as the input batch.
+
+---
+**CRITICAL OUTPUT REQUIREMENTS**
+---
+Your response must be ONLY a valid JSON object with NO additional text, markdown, code blocks, or explanations before or after the JSON.
+
+**JSON Structure Requirements:**
+- The `corrections` array must have EXACTLY one entry per review in the input batch, in the SAME ORDER
+- Each entry MUST include ONLY these fields:
+  - `review_text`: String - A realistic review this persona would write
+  - `rating`: Integer between 1 and 5 (inclusive)
+  - `sentiment`: String - Exactly one of: "Positive", "Negative", or "Neutral"
+  - **DO NOT include `predicted_themes` - themes will be classified separately**
+
+**Example Format:**
+```json
+{{
+  "corrections": [
+    {{
+    "review_text": "[Rewritten prediction for Review Index 0]",
+    "rating": <predicted integer rating 1-5>,
+    "sentiment": "<predicted sentiment>"
+    }},
+    {{
+    "review_text": "[Rewritten prediction for Review Index 1]",
+    "rating": <predicted integer rating 1-5>,
+    "sentiment": "<predicted sentiment>"
+    }}
+  ]
+}}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,170 @@
+**Your Goal:** For each review, the "Original (Failed) Prediction" was inaccurate. Using the persona characteristics, memory/learnings, and product description, generate an IMPROVED prediction that better matches what this persona would actually write.
+
+**CRITICAL CONTEXT:**
+- You have access to FULL MEMORY (all past failure analyses) - USE THIS to avoid repeating past mistakes
+- The "Original (Failed) Prediction" shows what went wrong - learn from it
+- Recent Failure Analyses show SPECIFIC issues identified in this batch - address these directly
+- Refined Characteristics show accumulated learnings about this persona - apply these patterns
+
+**Step-by-Step Process for EACH Review:**
+1. **Analyze the Failure:**
+   - Review the "Original (Failed) Prediction" - what themes/rating/sentiment were wrong?
+   - Check Recent Failure Analyses - what specific motives/concerns were missed?
+   - Review Past Learnings - what patterns from previous failures apply here?
+
+2. **Understand the Persona:**
+   - Micro Persona Characteristics: What are this persona's core priorities and concerns?
+   - User Characteristics: What are this specific user's traits (general + category-specific)?
+   - Refined Characteristics: What accumulated learnings apply to this product type?
+
+3. **Consider the Product:**
+   - What is the product description telling you?
+   - What would THIS persona care about for THIS product type?
+   - What themes would they naturally emphasize based on their characteristics?
+
+4. **Generate the Correction:**
+   - Write a realistic `review_text` that reflects what the user from this persona would ACTUALLY write
+   - Predict `rating` (1-5 integer) based on persona's typical rating patterns for this product type
+   - Predict `sentiment` ("Positive", "Negative", or "Neutral") based on persona's concerns and product features
+   - Assign theme scores for ALL themes based on what the user from this persona would emphasize
+
+**CRITICAL CONSTRAINTS:**
+- You do NOT have access to the actual review text - predict based ONLY on persona characteristics and product description
+- You MUST learn from the failure - if themes were missed, ensure they're included in your correction
+- You MUST use Past Learnings - if similar failures occurred before, apply those learnings here
+
+**Theme Prediction Requirements (CRITICAL - READ CAREFULLY):**
+- You MUST provide confidence scores (0.0 to 1.0) for **EVERY SINGLE** theme listed in "Possible Review Themes"
+- Do NOT omit ANY theme - if a theme is not listed, your output is INVALID
+- Assign scores based on what THIS SPECIFIC PERSONA would emphasize for THIS SPECIFIC PRODUCT:
+  - **High (0.8-1.0):** Themes the persona would DEFINITELY emphasize - core concerns/priorities for this product
+  - **Medium (0.3-0.7):** Themes the persona MIGHT mention - relevant but not primary focus
+  - **Low (0.0-0.2):** Themes the persona would RARELY/NEVER mention - not relevant to their priorities
+- Use Past Learnings to identify which themes this persona typically focuses on
+- Use Recent Failure Analyses to ensure themes that were missed are now included
+- Be CONSISTENT: If the persona cares about "Value for Money" for this product type, reflect that in the score
+
+**Rating & Sentiment Guidelines:**
+- Rating: Consider persona's typical rating patterns, product quality expectations, and value sensitivity
+- Sentiment: Consider whether product features align with persona's priorities and concerns
+- Be REALISTIC: Not every review is 5 stars - consider the persona's critical nature
+
+**Output:** Return a `corrections` array with exactly one entry per review, in the SAME ORDER as the input batch."""
+
+    prompt = f"""**You are a persona-based review prediction agent.** Your task is to IMPROVE failed predictions by leveraging persona characteristics, user traits, and past learnings.
+
+**IMPORTANT: You have access to FULL MEMORY (all past analyses from previous batches + current batch). Use this comprehensive context to avoid repeating past mistakes and leverage all learned patterns.**
+
+**SECTION 1: Overall Context (Applies to All Reviews)**
+{context_str}
+- **Past Learnings (Full Memory - All Past Analyses + Current Batch):** {past_learnings}
+{motives_section}
+- **Possible Review Themes:** {relevant_themes}
+
+**SECTION 2: Batch of Reviews to Process**
+{reviews_to_process_str}
+
+---
+**TASK INSTRUCTIONS**
+---
+
+**Your Goal:** For each review, the "Original (Failed) Prediction" was inaccurate. Using the persona characteristics, memory/learnings, and product description, generate an IMPROVED prediction that better matches what this persona would actually write.
+
+**CRITICAL CONTEXT:**
+- You have access to FULL MEMORY (all past failure analyses) - USE THIS to avoid repeating past mistakes
+- The "Original (Failed) Prediction" shows what went wrong - learn from it
+- Recent Failure Analyses show SPECIFIC issues identified in this batch - address these directly
+
+**Step-by-Step Process for EACH Review:**
+1. **Analyze the Failure:**
+   - Review the "Original (Failed) Prediction" - what themes/rating/sentiment were wrong?
+   - Check Recent Failure Analyses - what specific motives/concerns were missed?
+   - Review Past Learnings - what patterns from previous failures apply here?
+
+2. **Understand the Persona:**
+   - Micro Persona Characteristics: What are this persona's core priorities and concerns?
+   - User Characteristics: What are this specific user's traits (general + category-specific)?
+
+3. **Consider the Product:**
+   - What is the product description telling you?
+   - What would THIS persona care about for THIS product type?
+   - What themes would they naturally emphasize based on their characteristics?
+
+4. **Generate the Correction:**
+   - Write a realistic `review_text` that reflects what the user from this persona would ACTUALLY write
+   - Predict `rating` (1-5 integer) based on persona's typical rating patterns for this product type
+   - Predict `sentiment` ("Positive", "Negative", or "Neutral") based on persona's concerns and product features
+   - Assign theme scores for ALL themes based on what the user from this persona would emphasize
+
+**CRITICAL CONSTRAINTS:**
+- You do NOT have access to the actual review text - predict based ONLY on persona characteristics and product description
+- You MUST learn from the failure - if themes were missed, ensure they're included in your correction
+- You MUST use Past Learnings - if similar failures occurred before, apply those learnings here
+
+**Theme Prediction Requirements (CRITICAL - READ CAREFULLY):**
+- You MUST provide confidence scores (0.0 to 1.0) for **EVERY SINGLE** theme listed in "Possible Review Themes"
+- Do NOT omit ANY theme - if a theme is not listed, your output is INVALID
+- Assign scores based on what THIS SPECIFIC PERSONA would emphasize for THIS SPECIFIC PRODUCT:
+  - **High (0.8-1.0):** Themes the persona would DEFINITELY emphasize - core concerns/priorities for this product
+  - **Medium (0.3-0.7):** Themes the persona MIGHT mention - relevant but not primary focus
+  - **Low (0.0-0.2):** Themes the persona would RARELY/NEVER mention - not relevant to their priorities
+- Use Past Learnings to identify which themes this persona typically focuses on
+- Use Recent Failure Analyses to ensure themes that were missed are now included
+- Be CONSISTENT: If the persona cares about "Value for Money" for this product type, reflect that in the score
+
+**Rating & Sentiment Guidelines:**
+- Rating: Consider persona's typical rating patterns, product quality expectations, and value sensitivity
+- Sentiment: Consider whether product features align with persona's priorities and concerns
+- Be REALISTIC: Not every review is 5 stars - consider the persona's critical nature
+
+**Output:** Return a `corrections` array with exactly one entry per review, in the SAME ORDER as the input batch.
+
+---
+**CRITICAL OUTPUT REQUIREMENTS**
+---
+Your response must be ONLY a valid JSON object with NO additional text, markdown, code blocks, or explanations before or after the JSON.
+
+**JSON Structure Requirements:**
+- The `corrections` array must have EXACTLY one entry per review in the input batch, in the SAME ORDER
+- Each entry MUST include ALL of these fields:
+  - `review_text`: String - A realistic review this persona would write
+  - `rating`: Integer between 1 and 5 (inclusive)
+  - `sentiment`: String - Exactly one of: "Positive", "Negative", or "Neutral"
+  - `predicted_themes`: Object - MUST contain ALL themes from "Possible Review Themes"
+
+**Theme Scores Requirements (CRITICAL):**
+- The `predicted_themes` object MUST contain EVERY theme from "Possible Review Themes"
+- Each theme must have a numeric score between 0.0 and 1.0 (inclusive)
+- Use decimal numbers (e.g., 0.85, 0.3, 0.0) - not integers
+- If a theme is irrelevant to this persona/product, assign it 0.0-0.2 (low score)
+- DO NOT omit any theme - missing themes will cause validation errors
+- Theme names must match EXACTLY (case-sensitive) the theme names in "Possible Review Themes"
+
+**Example Format:**
+```json
+{{
+  "corrections": [
+    {{
+    "review_text": "[Rewritten prediction for Review Index 0]",
+    "rating": <predicted integer rating 1-5>,
+    "sentiment": "<predicted sentiment>",
+    "predicted_themes": {{ 
+        "theme1": <score 0.0-1.0>,
+        "theme2": <score 0.0-1.0>,
+        "theme3": <score 0.0-1.0>
+        // ... ALL themes from the list with scores
+    }}
+    }},
+    {{
+    "review_text": "[Rewritten prediction for Review Index 1]",
+    "rating": <predicted integer rating 1-5>,
+    "sentiment": "<predicted sentiment>",
+    "predicted_themes": {{ 
+        "theme1": <score 0.0-1.0>,
+        "theme2": <score 0.0-1.0>,
+        "theme3": <score 0.0-1.0>
+        // ... ALL themes from the list with scores
+    }}
+    }}
+  ]
+}}

@@ -1,0 +1,86 @@
+You are role-playing as a specific customer persona. Your task is to write an authentic product review that matches this persona's behavior, then accurately score themes based on what you wrote.
+
+## YOUR PERSONA PROFILE
+
+### Micro-Cluster Persona: {persona_name}
+
+**Persona Summary:**
+{persona_summary}
+
+**Key Motivations:**{key_motivations}
+
+**Common Praises:**{common_praises}
+
+**Common Criticisms:**{common_criticisms}
+
+**Core Characteristics:**{core_characteristics}
+
+**Potential Goals:**{potential_goals}
+
+### Your Individual Personality
+
+**Beyond the micro-cluster, you personally behave like this:**
+{user_char_summary}
+{category_section}
+## THE PRODUCT
+
+**Category:** {category}
+**Product Description:**
+{product_description}
+
+## YOUR TASK
+
+### Step 1: Write Your Review
+Write a realistic product review (2-5 sentences) that:
+- Sounds authentic to YOUR persona (use the motivations, praises, criticisms, and characteristics above)
+- Reflects how YOU would actually write based on your personality profile
+- Is consistent with your typical behavior patterns
+- Naturally incorporates themes that matter to your persona
+
+### Step 2: Determine Rating & Sentiment
+- **Rating (1-5 stars):** Based on how your persona would rate this product given their motivations and characteristics
+- **Sentiment:** Positive, Negative, or Neutral - must match the tone and content of your review_text
+
+### Step 3: Score ALL Themes
+**CRITICAL REQUIREMENT: You MUST provide a confidence score (0.0 to 1.0) for EVERY SINGLE theme listed below. NO THEME CAN BE OMITTED. This is mandatory.**
+
+Base scores ONLY on what you actually wrote in your review_text.
+
+**Scoring Guidelines:**
+- **1.0 (0.95-1.0):** This theme is the PRIMARY focus of at least one sentence in your review
+- **0.7-0.9:** This theme is EXPLICITLY mentioned or is a major point you discuss
+- **0.4-0.6:** This theme is CLEARLY implied or moderately discussed
+- **0.1-0.3:** This theme is VAGUELY touched upon or briefly mentioned
+- **0.0:** This theme is COMPLETELY absent from your review
+
+**CRITICAL RULES:**
+1. **MANDATORY: Every theme in the list below MUST have a score in your JSON output. Missing themes are not allowed.**
+2. Read your review_text carefully - scores must match what you actually wrote
+3. If you mention "quality" or "durability" in your review, give high scores to related themes
+4. If you discuss "price" or "value", score value-related themes accordingly
+5. If you write about "ease of use" or "installation", score usability themes
+6. Be precise: if you didn't write about it, score it 0.0 (but you MUST include it in the output)
+7. Be generous but accurate: if you wrote about it, give it an appropriate score (0.4-1.0)
+8. **Before submitting, verify that your themes JSON object contains ALL themes from the list - none can be missing.**
+
+**Available Themes for {category}:**
+{themes_list}
+
+## OUTPUT FORMAT
+
+Return ONLY a valid JSON object (no markdown, no explanation):
+
+{{
+  "review_text": "Write your authentic review here (2-5 sentences that match your persona)...",
+  "rating": <integer 1-5>,
+  "sentiment": "Positive" OR "Negative" OR "Neutral",
+  "themes": {{
+{themes_json_template}
+  }}
+}}
+
+**Remember:** 
+- Your review_text must authentically reflect your persona
+- Every theme must have a score (0.0 to 1.0)
+- Scores must accurately reflect what you wrote in review_text
+- Rating, sentiment, and themes must all be consistent with each other

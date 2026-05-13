@@ -1,0 +1,78 @@
+# Stage 06: Tribe Formation (Clustering)
+
+stage: "06_tribe_formation"
+method: "umap_kmeans_clustering"
+
+# Model ID when using AWS Bedrock (OPENAI_BASE_URL set).
+# Omit or leave empty to use hyperparameters.tribe_hyperparameters.llm_model for all endpoints.
+bedrock_model_id: "openai.gpt-oss-120b"
+
+# Input/Output Artifacts
+# For segments mapper script (01_user_to_segments_mapper.py)
+segments_input_artifact: "user_embedding_v5:latest"  # From Stage 05 (user embeddings)
+segments_output_artifact: "user_segments_v5"
+embedding_filename: "user_embeddings.json"  # Filename of embeddings file in the artifact
+
+# Legacy/alternative artifact names (for backward compatibility)
+input_artifact: "user_embedding_v5:latest"  # Alternative name (used if segments_input_artifact not found)
+output_artifact: "user_segments_v5"  # Alternative name (used if segments_output_artifact not found)
+
+# Export Segment User Details Input/Output Artifacts (Script 01b)
+segments_input_artifact_01b: "user_segments_v5:latest"  # From Script 01 (user segments)
+segments_filename: "user_segments.json"  # Filename of segments file in the artifact
+training_data_with_topics_artifact: "train_set_with_topics_v5:latest"  # From Stage 04
+training_data_filename: "train_set_reviews_with_topics_filtered.json"  # Filename of training data in artifact
+backstory_input_artifact: "user_backstory_v5:latest"  # From Stage 05
+backstory_filename: "user_overall_characteristics.json"  # Filename of backstory file in artifact
+segment_details_output_artifact: "segment_user_details_v5"  # Output for Script 01b
+
+# Tribe Formation Input/Output Artifacts (Script 02)
+segment_details_input_artifact: "segment_user_details_v5:latest"  # From Script 01b
+segment_details_filename_pattern: "details_cluster_*.json"  # Pattern for segment detail files
+tribe_input_artifact: "user_segments_v5:latest"  # From Script 01
+tribe_segments_filename: "user_segments.json"  # Filename of segments file in artifact
+tribe_output_artifact: "user_tribe_v5"  # Output for Script 02
+
+# Tribe Seed Characteristics Input/Output Artifacts (Script 03)
+tribe_seed_input_artifact: "user_tribe_v5:latest"  # From Script 02
+tribe_seed_summaries_dir: "micro_cluster_summaries"  # Directory name for summaries in artifact
+tribe_seed_details_dir: "micro_cluster_details"  # Directory name for details in artifact
+tribe_seed_output_artifact: "tribe_seed_characteristics_v5"  # Output for Script 03
+
+# Hyperparameters
+hyperparameters:
+  n_macro_clusters: 2  # Test mode: reduced for small dataset
+  n_micro_clusters_per_macro: 5  # Test mode: reduced
+  min_clusters: 2  # Test mode: minimum for small dataset
+  target_clusters: 2  # Test mode: reduced for 10 users
+  
+  # UMAP settings
+  umap_n_neighbors: 15
+  umap_n_components: 2
+  umap_min_dist: 0.0
+  
+  # Quality thresholds
+  silhouette_threshold: 0.4
+  balance_threshold: 0.1
+  
+  # KMeans clustering settings
+  max_k: 11  # Maximum K value to evaluate
+  random_state: 42  # Random seed for reproducibility
+  n_init: 10  # Number of KMeans initializations
+  
+  # Tribe formation hyperparameters (Script 02)
+  tribe_hyperparameters:
+    llm_model: "o3"
+    similarity_threshold: 0.8
+    min_user_count: 1
+    max_user_count: 30
+    min_review_count: 5
+    coverage_goal: 1.0
+    min_clusters_to_find: 3
+    process_unprocessed: true
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Tribe Formation"
+artifact_type: "dataset"
+job_type: "tribe_formation"
