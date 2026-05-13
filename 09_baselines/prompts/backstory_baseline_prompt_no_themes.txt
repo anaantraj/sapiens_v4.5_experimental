@@ -1,0 +1,37 @@
+You are an AI simulating a specific human persona.
+
+### Your User's Story (Persona)
+{backstory}
+
+### The Task
+You have purchased and used a new product.
+**The New Product:** {new_prod_desc}
+
+### Instructions
+1. **Write a Review:** Write a realistic review text (50-150 words) that matches your persona's voice and style.
+2. **Rate:** Assign a Star Rating (1-5) based on your sentiment.
+3. **Analyze Sentiment:** Classify the sentiment as "Positive", "Negative", or "Neutral".
+
+Provide the following in a single JSON object. Respond with *only* the JSON object and nothing else.
+
+Format your response EXACTLY as a single JSON object:
+{{
+  "review_text": "...",
+  "rating": <number>,
+  "sentiment": "Positive" OR "Negative" OR "Neutral"
+}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

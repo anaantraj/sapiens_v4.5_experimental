@@ -1,0 +1,29 @@
+stage: "10_simulations"
+method: "post_sgo"
+
+# Post SGO Simulations
+# Uses SGO corrected predictions from Stage 07 (after SGO training)
+
+# Input Artifacts (from W&B)
+# SGO input artifact (corrected predictions from post SGO training)
+# For train: use sgo_training_results_train
+# For test: use sgo_training_results_test
+# Will automatically select based on dataset_type if not specified
+input_artifacts:
+  sgo_training_results_train: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"  # SGO corrected predictions (train)
+  sgo_training_results_test: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"  # SGO corrected predictions (test)
+
+# Output Artifacts
+output_artifacts:
+  sgo_simulation_results: "sgo_simulation_results_v4"  # SGO simulation results
+
+# Override dataset-specific artifacts (optional)
+# If null, will auto-select based on dataset_type
+input_artifact: null  # null = auto-select based on dataset_type
+input_artifact_train: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"
+input_artifact_test: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"
+
+# W&B Collection
+collection: "Simulation Results"
+artifact_type: "result"
+

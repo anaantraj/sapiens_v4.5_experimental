@@ -1,0 +1,63 @@
+stage: "10_simulations"
+method: "pre_sgo"
+
+# Pre SGO Training: Initial Predictions Generation
+# This step generates initial predictions before SGO training (delta refinement)
+
+# Input Artifacts (from W&B - NO LOCAL FALLBACKS)
+input_artifacts:
+  tribe_seed_characteristics: "tribe_seed_characteristics_v5:latest"  # From 06_tribe_formation
+  user_tribes: "user_tribe_v5:latest"  # From 06_tribe_formation - User to tribe mapping
+  user_backstories: "user_backstory_v5:latest"  # From 05_user_level_inference
+  training_data_with_topics: "train_set_with_topics_v5:latest"  # From 04_review_topic_classification
+  test_data_with_topics: "test_set_with_topics_v5:latest"  # From 04_review_topic_classification
+  topic_universe: "topic_universe_final_sampled_v5:latest"  # From 03_topic_universe
+  category_mapping: "category_mapping_to_7_main:latest"  # REQUIRED - Category mapping
+
+# Output Artifacts
+output_artifacts:
+  initial_predictions: "Prediction_Accuracy_v4"  # Base name - will append model suffix
+  test_predictions: "Test_Prediction_Accuracy_v4"  # For test dataset
+
+# Output Configuration
+output:
+  stage: "10_running_simulations"  # Stage directory where artifacts should be saved
+
+# File Patterns (for finding files within artifacts)
+file_patterns:
+  tribe_seed_characteristics: "tribe_seed_characteristics.json"
+  user_backstories: "user_overall_characteristics.json"
+  training_data_with_topics: "train_set_reviews_with_topics_filtered.json"
+  test_data_with_topics: "test_set_reviews_with_topics_filtered.json"
+  topic_universe: "topic_universe.json"
+  user_tribes: "user_tribes.json"
+  category_mapping: "category_mapping.json"
+
+# Dataset type to file pattern key mapping
+dataset_pattern_mapping:
+  train: "training_data_with_topics"
+  test: "test_data_with_topics"
+
+# Prompt Configuration
+prompt:
+  directory: "prompts"  # Relative to 07_pre_sgo_predictions directory
+  initial_prediction: "initial_prediction_prompt.txt"
+
+# Schema Configuration
+schema:
+  version: "v4"
+
+# Hyperparameters
+hyperparameters:
+  model: "o3"  # Options: "o3", "gpt-4o", "gpt-4-turbo", etc.
+  min_request_interval: 0.12  # Rate limiting (seconds between requests)
+  max_tokens: 2000  # Only used for non-o3 models
+  temperature: 0.7  # Only used for non-o3 models
+  num_workers: 10  # Parallel processing workers
+  max_retries: 3  # Maximum retries for LLM API calls
+  target_clusters: null  # Optional: list of clusters to process (e.g., ["cluster_0"]). Set to null to process all clusters.
+
+# W&B Collection
+collection: "Simulation Results"
+artifact_type: "result"
+

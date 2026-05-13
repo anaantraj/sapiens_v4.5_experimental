@@ -1,0 +1,75 @@
+stage: "09_baselines"
+method: "baseline_methods"
+
+# Model ID when using AWS Bedrock (OPENAI_BASE_URL set).
+# Used only for non-logprob OpenAI paths in this stage.
+bedrock_model_id: "openai.gpt-oss-120b"
+
+# Dataset Configuration
+dataset_type: "train"  # "train" or "test" - determines which input artifacts to use
+
+# Input Artifacts (from W&B)
+# NO LOCAL FALLBACKS - everything must be downloaded from W&B
+input_artifacts:
+  # Topic Universe (from Stage 03)
+  topics: "topic_universe_final_sampled_2kusers_10kreviews_v4:latest"  # From 03_topic_universe
+
+  # Training/Test Data (from Stage 04)
+  training_data_train: "train_set_reviews_with_merged_predictions_cleaned:latest"  # From 04_review_topic_classification (train)
+  training_data_test: "test_set_with_topics_v5:latest"  # From 04_review_topic_classification (test)
+  
+  # User Data (from Stage 05)
+  user_backstories: "user_backstory_sampled_2kusers_10kreviews_v4:latest"  # From 05_user_level_inference
+  user_review_history: "user_review_history_v5:latest"  # From 05_user_level_inference (if available)
+  
+  # REQUIRED: Category mapping artifact (must be from W&B)
+  category_mapping: "category_mapping_to_7_main:latest"  # Category mapping artifact (REQUIRED - no fallback)
+
+# Output Artifacts
+output_artifacts:
+  baseline_predictions: "baseline_predictions_v6_user_backstory_context"  # Baseline prediction results
+
+# File Patterns (for finding files within artifacts)
+file_patterns:
+  topic_universe: "topic_universe.json"  # Topic universe file pattern
+  training_data: "cleaned_merged_reviews_by_user.json"  # Training data file pattern (train)
+  test_data: "test_set_reviews_with_topics_filtered.json"  # Test data file pattern (test)
+  user_backstories: "user_overall_characteristics.json"  # User backstories file pattern
+  user_review_history: "user_review_history.json"  # User review history file pattern
+  category_mapping: "category_mapping.json"  # Category mapping file pattern
+  baseline_predictions: "baseline_predictions_{model}_{method}{scoring_suffix}.json"  # Output filename pattern (supports {model}, {method}, {scoring_suffix} placeholders)
+
+
+# Prompt Configuration
+prompt:
+  directory: "prompts"  # Relative to stage directory or 10_running_simulations/baselines/prompts
+  history_prompt: "history_prompt.txt"  # History method prompt
+  backstory_prompt: "backstory_prompt.txt"  # Backstory method prompt
+
+# Baseline Configuration
+baseline_config:
+  models: ["o3", "claude"]  # Models to run
+  methods: ["history", "backstory"]  # Methods to run
+  run_all_combinations: true  # Run all model+method combinations
+
+# Model Configuration (all configurable - no hardcoded values)
+# Model for generating review text (used in both default and logprobs modes)
+# The --model argument maps to these: "o3" -> review_prediction_models.o3, "claude" -> review_prediction_models.claude
+review_prediction_models:
+  o3: "o3"  # Model name for OpenAI when --model o3
+  claude: "claude-3-5-sonnet-20241022"  # Model name for Anthropic when --model claude
+
+# Model for theme classification with logprobs (used only in logprobs mode)
+theme_prediction_model: "gpt-4o-mini"  # Options: "gpt-4o-mini", "gpt-4o", etc. (must support logprobs)
+
+# Hyperparameters
+hyperparameters:
+  max_workers: 20  # Parallel workers
+  min_request_interval: 0.1  # Rate limiting (seconds between requests)
+  max_retries: 3  # Maximum retries for LLM API calls
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Baseline Results"
+artifact_type: "model"
+job_type: "baseline"

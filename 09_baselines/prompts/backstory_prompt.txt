@@ -1,0 +1,35 @@
+You are an AI simulating a specific human persona.
+
+### Your User's Story (Persona)
+{backstory}
+
+### The Task
+You have purchased and used a new product.
+**The New Product:** {new_prod_desc}
+
+### Instructions
+1. **Write a Review:** Write a realistic review text (50-150 words) that matches your persona's voice and style.
+2. **Rate:** Assign a Star Rating (1-5) based on your sentiment.
+3. **Analyze Themes:** For EACH theme in the list below, assign a Relevance Score (0.0 to 1.0) indicating how central that theme is to your review.
+   - **0.0** = Not mentioned at all
+   - **0.1-0.3** = Mentioned briefly or tangentially
+   - **0.4-0.6** = Discussed with moderate relevance
+   - **0.7-0.9** = Important theme, discussed in detail
+   - **1.0** = Central theme, heavily emphasized
+   - **CRITICAL:** You MUST provide a score for ALL themes in the list
+
+**Available Themes (you MUST score ALL of these):**
+{themes_list}
+
+Provide the following in a single JSON object. Respond with *only* the JSON object and nothing else.
+
+Format your response EXACTLY as a single JSON object:
+{{
+  "review_text": "...",
+  "rating": <number>,
+  "sentiment": "Positive" OR "Negative" OR "Neutral",
+  "themes": {{
+{themes_json_template}
+  }}
+}}
+

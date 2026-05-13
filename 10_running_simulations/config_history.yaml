@@ -1,0 +1,42 @@
+stage: "10_simulations"
+method: "history"
+
+# History Baseline Simulations
+# Uses review history to predict next review
+
+# Input Artifacts (from W&B)
+input_artifacts:
+  training_data: "train_set_with_topics_v5:latest"  # Training data with topics (from Stage 04)
+  user_review_history: "user_review_history_v5:latest"  # User review history (from Stage 05)
+  topics: "topic_universe_final_sampled_v5:latest"  # Topic universe (from Stage 03)
+  category_mapping: "category_mapping_to_7_main:latest"  # Category mapping (REQUIRED)
+
+# Output Artifacts
+output_artifacts:
+  baseline_simulation_results: "baseline_simulation_results_v4"  # Baseline simulation results
+
+# File Patterns (for finding files within artifacts)
+file_patterns:
+  training_data: "train_set_reviews_with_topics_filtered.json"
+  user_review_history: "user_review_history.json"
+  topics: "topic_universe.json"
+  category_mapping: "category_mapping.json"
+
+# Prompt Configuration
+prompt:
+  directory: "baselines/prompts"  # Relative to 10_running_simulations directory
+  history_prompt: "history_prompt.txt"
+
+# Model Configuration
+models: ["o3"]  # Options: ["o3"], ["claude"], ["o3", "claude"]
+
+# Hyperparameters
+hyperparameters:
+  num_workers: 10
+  min_request_interval: 0.1  # Rate limiting (seconds between requests)
+  max_retries: 3  # Maximum retries for LLM API calls
+
+# W&B Collection
+collection: "Simulation Results"
+artifact_type: "result"
+

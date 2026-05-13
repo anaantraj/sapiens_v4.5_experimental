@@ -1,0 +1,254 @@
+stage: "10_simulations"
+method: "unified_simulation_runner"
+
+# Dataset Configuration
+dataset_type: "train"  # "train" or "test" - determines which input artifacts to use
+
+# Input Artifacts (from W&B)
+# NO LOCAL FALLBACKS - everything must be downloaded from W&B
+input_artifacts:
+  # For Persona Simulations (from Stage 06/08)
+  model: "tribe_seed_characteristics_sampled_2kusers_10kreviews_v4:latest"  # Tribe personas from Stage 06.3
+  test: "user_backstory_v4:latest"  # User characteristics for prompts (from Stage 05)
+  topics: "topic_universe_final_sampled_2kusers_10kreviews_v4:latest"  # Topic universe from Stage 03
+  
+  # For Baseline Simulations (from Stage 09)
+  training_data: "train_set_with_topics_v4:latest"  # Training data with topics (for baselines)
+  user_backstories: "user_backstory_sampled_2kusers_10kreviews_v4:latest"  # User backstories (for baselines)
+  user_review_history: "user_review_history_sampled_2kusers_10kreviews_v4:latest"  # User review history (for baselines)
+  
+  # For SGO Simulations (from Stage 07 - post SGO training)
+  sgo_training_results_train: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"  # SGO corrected predictions (train)
+  sgo_training_results_test: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"  # SGO corrected predictions (test)
+
+# Output Artifacts
+output_artifacts:
+  persona_simulation_results: "simulation_results_v4"  # Persona-based simulation results
+  baseline_simulation_results: "baseline_simulation_results_v4"  # Baseline simulation results
+  sgo_simulation_results: "sgo_simulation_results_v4"  # SGO simulation results
+  unified_simulation_results: "unified_simulation_results_v4"  # Combined results from all methods
+
+# Simulation Configuration
+# Configure which simulation types to run - set to true/false to enable/disable
+simulation_config:
+  # =====================================================================
+  # Pre SGO Training: Initial Predictions Generation
+  # =====================================================================
+  pre_sgo:
+    enabled: false  # Set to true to run initial predictions generation
+    # This step generates initial predictions before SGO training (delta refinement)
+    bedrock_model_id: "openai.gpt-oss-120b"
+    
+    # Convert Pre SGO Training results to unified simulation format
+    convert_to_simulation_format: false  # Set to true to convert Pre SGO results to unified simulation format
+    
+    # Input Artifacts (from W&B - NO LOCAL FALLBACKS)
+    input_artifacts:
+      tribe_seed_characteristics: "tribe_seed_characteristics_v5:latest"  # From 06_tribe_formation
+      user_tribes: "user_tribe_v5:latest"  # From 06_tribe_formation - User to tribe mapping
+      user_backstories: "user_backstory_v5:latest"  # From 05_user_level_inference
+      training_data_with_topics: "train_set_with_topics_v5:latest"  # From 04_review_topic_classification
+      test_data_with_topics: "test_set_with_topics_v5:latest"  # From 04_review_topic_classification
+      topic_universe: "topic_universe_final_sampled_v5:latest"  # From 03_topic_universe
+      category_mapping: "category_mapping_to_7_main:latest"  # REQUIRED - Category mapping
+    
+    # Output Artifacts
+    output_artifacts:
+      initial_predictions: "Prediction_Accuracy_v5"  # Base name - will append model suffix
+      test_predictions: "Test_Prediction_Accuracy_v5"  # For test dataset
+    
+    # File Patterns (for finding files within artifacts)
+    file_patterns:
+      tribe_seed_characteristics: "tribe_seed_characteristics.json"
+      user_backstories: "user_overall_characteristics.json"
+      training_data_with_topics: "train_set_reviews_with_topics_filtered.json"
+      test_data_with_topics: "test_set_reviews_with_topics_filtered.json"
+      topic_universe: "topic_universe.json"
+      user_tribes: "user_tribes.json"
+      category_mapping: "category_mapping.json"
+    
+    # Dataset type to file pattern key mapping
+    dataset_pattern_mapping:
+      train: "training_data_with_topics"
+      test: "test_data_with_topics"
+    
+    # Prompt Configuration
+    prompt:
+      directory: "prompts"  # Relative to 07_pre_sgo_predictions directory
+      initial_prediction: "initial_prediction_prompt.txt"
+    
+    # Schema Configuration
+    schema:
+      version: "v4"
+    
+    # Hyperparameters (can override from main hyperparameters section)
+    hyperparameters:
+      model: "o3"  # Options: "o3", "gpt-4o", "gpt-4-turbo", etc.
+      min_request_interval: 0.12  # Rate limiting (seconds between requests)
+      max_tokens: 2000  # Only used for non-o3 models
+      temperature: 0.7  # Only used for non-o3 models
+      num_workers: 10  # Parallel processing workers
+      max_retries: 3  # Maximum retries for LLM API calls
+      target_clusters: null  # Optional: list of clusters to process (e.g., ["cluster_0"])
+  
+  # =====================================================================
+  # SGO Training: Delta Refinement
+  # =====================================================================
+  sgo_training:
+    enabled: true  # Set to true to run SGO training (delta refinement)
+    # This step performs delta refinement on initial predictions
+    # Note: Requires initial_predictions artifact from pre_sgo_training step
+    bedrock_model_id: "openai.gpt-oss-120b"
+    
+    # Test Mode Configuration
+    test_mode: true  # Set to true to enable test mode - uses test set reviews with memory files for predictions
+    # When test_mode is enabled:
+    # - Loads all test set reviews
+    # - Uses persona chars, user chars, user category chars, product desc, and memory file from each cluster
+    # - Makes predictions for all test reviews using the learned memory
+    
+    # Input Artifacts (from W&B - NO LOCAL FALLBACKS)
+    input_artifacts:
+      # Initial predictions (from pre SGO training or previous run)
+      # Note: Pre SGO Training creates artifact with model suffix (e.g., Prediction_Accuracy_v5_o3)
+      # If Pre SGO Training is disabled, you must manually specify the correct artifact name
+      initial_predictions_train: "Prediction_Accuracy_v5_o3:latest"  # From pre SGO training (train) - includes model suffix
+      # Test data (required when test_mode is enabled)
+      test_data_with_topics: "test_set_with_topics_v5:latest"  # From 04_review_topic_classification - Required for test_mode
+      # Supporting artifacts
+      tribe_seed_characteristics: "tribe_seed_characteristics_v5:latest"  # From 06_tribe_formation
+      user_backstories: "user_backstory_v5:latest"  # From 05_user_level_inference
+      user_tribes: "user_tribe_v5:latest"  # From 06_tribe_formation - User to tribe mapping (required for test_mode)
+      topic_universe: "topic_universe_final_sampled_v5:latest"  # From 03_topic_universe
+      category_mapping: "category_mapping_to_7_main:latest"  # REQUIRED - Category mapping
+    
+    # Output Artifacts
+    output_artifacts:
+      sgo_training_results: "sgo_training_results_v5"
+    
+    # Output Configuration
+    output:
+      stage: "10_running_simulations"  # Stage directory where artifacts should be saved
+    
+    # File Patterns (for finding files within artifacts)
+    file_patterns:
+      tribe_seed_characteristics: "tribe_seed_characteristics.json"
+      user_backstories: "user_overall_characteristics.json"
+      test_data_with_topics: "test_set_reviews_with_topics_filtered.json"  # For test_mode
+      user_tribes: "user_tribes.json"  # For test_mode
+      topic_universe: "topic_universe.json"
+      category_mapping: "category_mapping.json"
+      # For test_mode memory files
+      memory_batch_analyses: "{micro_id}_batch_analyses.json"  # Pattern for memory files (micro_id will be substituted)
+      test_predictions_output: "{micro_id}_test_predictions.json"  # Pattern for test predictions output
+      test_failed_predictions: "{micro_id}_test_failed_predictions.json"  # Pattern for failed predictions
+    
+    # Prompt Configuration
+    prompt:
+      directory: "prompts"  # Relative to 07_sgo_training directory
+      part_a_batch: "part_a_batch_prompt.txt"  # Correction prompt
+      part_b_batch: "part_b_batch_prompt.txt"  # Analysis prompt
+      # For test_mode predictions (uses post_sgo prediction prompt with memory)
+      test_prediction: "test_prediction_with_memory_prompt.txt"  # For test_mode predictions (in 07_post_sgo_predictions/prompts)
+    
+    # Schema Configuration
+    schema:
+      version: "v4"
+    
+    # Hyperparameters (can override from main hyperparameters section)
+    hyperparameters:
+      embedding_model: "text-embedding-3-small"
+      analysis_model: "o3"  # Options: "o3", "gpt-4o", "gpt-4-turbo", etc.
+      min_request_interval: 0.1  # Minimum seconds between embedding requests
+      max_tokens: 2000  # Only used for non-o3 models
+      temperature: 0.7  # Only used for non-o3 models
+      num_iterations: 5  # Number of refinement iterations
+      batch_size: 5  # Batch size for parallel processing
+      delta_threshold: 0.3  # Theme delta threshold for correction
+      weight_text_delta: 0.7  # Weight for text delta
+      weight_theme_delta: 0.3  # Weight for theme delta
+      max_parallel_batches: 3  # Maximum concurrent batches
+      max_parallel_embeddings: 10  # Maximum concurrent embedding calculations
+      parallel_batches: true  # Enable parallel batch processing
+      parallel_embeddings: true  # Enable parallel embedding calculations
+      api_rate_limit_delay: 0.5  # Delay between API calls (seconds)
+      max_retries: 3  # Maximum retries for LLM API calls
+      # For test_mode predictions
+      num_workers: 10  # Number of parallel workers for test mode predictions
+      default_micro_id: "micro_0"  # Default micro cluster ID if not found in tribe_id
+      no_memory_message: "None - this is the first prediction for this persona"  # Message when no memory found
+  
+  # =====================================================================
+  # Persona-based simulations (using trained personas from Stage 06/08)
+  # =====================================================================
+  persona_simulations:
+    enabled: false  # Set to true to run persona-based simulations
+    # No additional config needed - uses model artifact from input_artifacts
+  
+  # =====================================================================
+  # Baseline simulations (history/backstory methods from Stage 09)
+  # =====================================================================
+  baseline_simulations:
+    enabled: false  # Set to true to run baseline simulations
+    
+    # Model selection - choose one or more
+    # Options: "o3", "claude"
+    models: ["o3"]  # Example: ["o3"] for only o3, ["o3", "claude"] for both
+    
+    # Method selection - choose one or more
+    # Options: "history" (uses review history), "backstory" (uses persona backstory)
+    methods: ["history"]  # Example: ["history"] for only history, ["history", "backstory"] for both
+    
+    # Run all combinations (model x method)
+    # If true: runs all combinations of models x methods
+    # If false: runs only the first model with first method
+    run_all_combinations: false
+    
+    # Example configurations:
+    # - Single model, single method: models: ["o3"], methods: ["history"], run_all_combinations: false
+    # - Single model, all methods: models: ["o3"], methods: ["history", "backstory"], run_all_combinations: true
+    # - All models, single method: models: ["o3", "claude"], methods: ["history"], run_all_combinations: true
+    # - All combinations: models: ["o3", "claude"], methods: ["history", "backstory"], run_all_combinations: true
+  
+  # =====================================================================
+  # SGO simulations (using SGO corrected predictions from Stage 07)
+  # =====================================================================
+  sgo_simulations:
+    enabled: false  # Set to true to run SGO simulations
+    
+    # SGO input artifact (corrected predictions from post SGO training)
+    # For train: use sgo_training_results_train
+    # For test: use sgo_training_results_test
+    # Will automatically select based on dataset_type if not specified
+    input_artifact: null  # null = auto-select based on dataset_type
+    
+    # Override dataset-specific artifacts (optional)
+    input_artifact_train: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"
+    input_artifact_test: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"
+
+# Deduplication Configuration
+deduplication:
+  enabled: true  # Enable deduplication across simulation types
+  dedupe_key_fields: ["user_id", "stimulus_product_id", "review_index"]  # Fields to use for deduplication
+  keep_method: "best"  # "best" (keep best metric), "first" (keep first), "last" (keep last)
+
+# Hyperparameters
+# These apply to all training and simulation steps
+# Can be overridden by specific sections in simulation_config
+hyperparameters:
+  max_workers: 10                     # Parallel workers (reduced to avoid rate limits)
+  max_reviews: null                    # No limit - process all reviews
+  only_cluster: null                   # Process all clusters (set to "cluster_0" for test mode)
+  start_from_cluster: null
+  embedding_model: "text-embedding-3-small"
+  min_request_interval: 0.1  # Rate limiting (seconds between requests)
+  force_reprocess: false  # Force reprocess even if output exists (for SGO training)
+  
+  # Note: Pre SGO and SGO training have their own hyperparameters in simulation_config
+  # These global hyperparameters are used as defaults and can be overridden
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Simulation Results"
+artifact_type: "model"
+job_type: "simulation"

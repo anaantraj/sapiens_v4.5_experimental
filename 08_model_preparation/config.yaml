@@ -1,0 +1,44 @@
+stage: "08_model_preparation"
+method: "persona_consolidation"
+
+# Dataset Configuration
+dataset_type: "train"  # "train" or "test" - determines which input artifacts to use
+
+# Input/Output Artifacts
+# All input artifacts should reference outputs from previous stages
+# NO LOCAL FALLBACKS - everything must be downloaded from W&B
+input_artifacts:
+  # From Stage 07: SGO Training (delta refinement results)
+  # For train: use training results from 07_sgo_training
+  # For test: use test results from 07_sgo_training (if available)
+  sgo_training_results_train: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"  # From 07_sgo_training (train results)
+  sgo_training_results_test: "sgo_training_results_sampled_2kusers_10kreviews_v4:latest"  # From 07_sgo_training (test results, if separate)
+
+# Output Artifacts
+output_artifacts:
+  sapiens_model: "sapiens_model_v1"  # Final persona model
+
+# Directory Structure (within input artifact)
+# These paths are relative to the artifact root
+directory_structure:
+  summaries_dir: "micro_cluster_summaries"  # Directory containing cluster summaries
+  details_dir: "micro_cluster_details"  # Directory containing cluster details
+
+# File Patterns (for finding files within artifacts)
+file_patterns:
+  summary_file: "micro_{micro_id}_summary.json"  # Pattern for summary files
+  details_file: "micro_{micro_id}_details.json"  # Pattern for details files
+  output_file: "micro_{micro_id}.json"  # Pattern for output persona files
+  cluster_prefix: "cluster_"  # Prefix for cluster directories
+  micro_prefix: "micro_"  # Prefix for micro cluster files
+
+# Hyperparameters
+hyperparameters:
+  # Artifact type to try (order matters - will try first, then fallback)
+  artifact_types: ["model", "dataset"]  # Try model first, then dataset
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Sapiens Model"
+artifact_type: "model"
+job_type: "model_preparation"

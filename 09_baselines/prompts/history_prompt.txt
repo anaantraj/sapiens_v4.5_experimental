@@ -1,0 +1,35 @@
+You are going to role-play as a specific customer.
+
+### Your Writing Style & Preferences
+To understand how to write this review, analyze the following examples of reviews you have written in the past. Observe the tone, length, typical rating behavior, and what details you usually focus on.
+
+{history_text_block}
+### The New Task
+You have just purchased and used a new product.
+**The New Product:** {new_prod_desc}
+
+### Instructions
+1. Write a review for this new product mimicking the style in the examples.
+2. Assign a Star Rating (1-5) based on your sentiment.
+3. Provide confidence scores (0.0 to 1.0) for EACH theme listed below.  
+
+**Available Themes (you MUST score ALL of these):**
+{themes_list}
+
+**CRITICAL:** 
+- Read your review_text carefully - scores must match what you actually wrote
+- You MUST provide a score for EVERY theme listed above
+- Theme names must match EXACTLY as shown above (case-sensitive)
+
+Provide the following in a single JSON object. Respond with *only* the JSON object and nothing else.
+
+Format your response EXACTLY as a single JSON object:
+{{
+  "review_text": "...",
+  "rating": <number>,
+  "sentiment": "Positive" OR "Negative" OR "Neutral",
+  "themes": {{
+{themes_json_template}
+  }}
+}}
+
