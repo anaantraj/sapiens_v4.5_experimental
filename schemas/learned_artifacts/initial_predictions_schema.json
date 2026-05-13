@@ -1,0 +1,549 @@
+{
+  "$defs": {
+    "ActualReview": {
+      "description": "Actual/ground truth review data.",
+      "properties": {
+        "review_text": {
+          "description": "Actual review text",
+          "title": "Review Text",
+          "type": "string"
+        },
+        "rating": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Actual rating (1-5)",
+          "title": "Rating"
+        },
+        "sentiment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Actual sentiment",
+          "title": "Sentiment"
+        },
+        "predicted_themes": {
+          "description": "Actual themes (list of theme names)",
+          "items": {
+            "type": "string"
+          },
+          "title": "Predicted Themes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "review_text"
+      ],
+      "title": "ActualReview",
+      "type": "object"
+    },
+    "AggregateMetricStats": {
+      "description": "Aggregated metric statistics.",
+      "properties": {
+        "mean": {
+          "description": "Mean value",
+          "title": "Mean",
+          "type": "number"
+        },
+        "std": {
+          "description": "Standard deviation",
+          "minimum": 0.0,
+          "title": "Std",
+          "type": "number"
+        },
+        "count": {
+          "description": "Number of samples",
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mean",
+        "std",
+        "count"
+      ],
+      "title": "AggregateMetricStats",
+      "type": "object"
+    },
+    "InitialPredictionsReviewMetrics": {
+      "description": "Metrics comparing prediction vs actual for initial predictions.",
+      "properties": {
+        "rating_score": {
+          "description": "Rating score (0.0-1.0)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Rating Score",
+          "type": "number"
+        },
+        "sentiment_score": {
+          "description": "Sentiment score (0.0-1.0)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Sentiment Score",
+          "type": "number"
+        },
+        "recall@1": {
+          "description": "Recall@1",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@1",
+          "type": "number"
+        },
+        "recall@3": {
+          "description": "Recall@3",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@3",
+          "type": "number"
+        },
+        "recall@5": {
+          "description": "Recall@5",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@5",
+          "type": "number"
+        },
+        "recall@k": {
+          "description": "Recall@k",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@K",
+          "type": "number"
+        },
+        "recall@max(3,k)": {
+          "description": "Recall@max(3,k)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@Max(3,K)",
+          "type": "number"
+        },
+        "recall@max(3,k)_threshold_0.8": {
+          "description": "Recall@max(3,k) with 0.8 threshold",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@Max(3,K) Threshold 0.8",
+          "type": "number"
+        },
+        "num_themes_above_0.8": {
+          "description": "Number of themes above 0.8",
+          "minimum": 0,
+          "title": "Num Themes Above 0.8",
+          "type": "integer"
+        },
+        "num_additional_themes_0.8": {
+          "description": "Number of additional themes at 0.8 threshold",
+          "minimum": 0,
+          "title": "Num Additional Themes 0.8",
+          "type": "integer"
+        },
+        "recall@max(3,k)_threshold_0.85": {
+          "description": "Recall@max(3,k) with 0.85 threshold",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall@Max(3,K) Threshold 0.85",
+          "type": "number"
+        },
+        "num_themes_above_0.85": {
+          "description": "Number of themes above 0.85",
+          "minimum": 0,
+          "title": "Num Themes Above 0.85",
+          "type": "integer"
+        },
+        "num_additional_themes_0.85": {
+          "description": "Number of additional themes at 0.85 threshold",
+          "minimum": 0,
+          "title": "Num Additional Themes 0.85",
+          "type": "integer"
+        },
+        "overall_accuracy": {
+          "description": "Overall accuracy score",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Overall Accuracy",
+          "type": "number"
+        },
+        "weights_used": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Weights used for overall accuracy",
+          "title": "Weights Used",
+          "type": "object"
+        },
+        "num_actual_themes": {
+          "description": "Number of actual themes",
+          "minimum": 0,
+          "title": "Num Actual Themes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rating_score",
+        "sentiment_score",
+        "recall@1",
+        "recall@3",
+        "recall@5",
+        "recall@k",
+        "recall@max(3,k)",
+        "recall@max(3,k)_threshold_0.8",
+        "num_themes_above_0.8",
+        "num_additional_themes_0.8",
+        "recall@max(3,k)_threshold_0.85",
+        "num_themes_above_0.85",
+        "num_additional_themes_0.85",
+        "overall_accuracy",
+        "weights_used",
+        "num_actual_themes"
+      ],
+      "title": "InitialPredictionsReviewMetrics",
+      "type": "object"
+    },
+    "PredictionMetadata": {
+      "description": "Metadata for the micro-cluster predictions.",
+      "properties": {
+        "persona_name": {
+          "description": "Persona name",
+          "title": "Persona Name",
+          "type": "string"
+        },
+        "micro_cluster_id": {
+          "description": "Micro cluster identifier",
+          "title": "Micro Cluster Id",
+          "type": "string"
+        },
+        "total_users_in_cluster": {
+          "description": "Total users in cluster",
+          "minimum": 0,
+          "title": "Total Users In Cluster",
+          "type": "integer"
+        },
+        "total_reviews_from_cluster": {
+          "description": "Total reviews from cluster",
+          "minimum": 0,
+          "title": "Total Reviews From Cluster",
+          "type": "integer"
+        },
+        "quantitative_summary": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/QuantitativeSummary"
+            }
+          ],
+          "description": "Quantitative summary"
+        },
+        "qualitative_summary": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/QualitativeSummary"
+            }
+          ],
+          "description": "Qualitative summary"
+        }
+      },
+      "required": [
+        "persona_name",
+        "micro_cluster_id",
+        "total_users_in_cluster",
+        "total_reviews_from_cluster",
+        "quantitative_summary",
+        "qualitative_summary"
+      ],
+      "title": "PredictionMetadata",
+      "type": "object"
+    },
+    "PredictionOutput": {
+      "description": "LLM prediction output for a review.",
+      "properties": {
+        "review_text": {
+          "description": "Generated review text",
+          "title": "Review Text",
+          "type": "string"
+        },
+        "rating": {
+          "description": "Predicted rating (1-5)",
+          "maximum": 5.0,
+          "minimum": 1.0,
+          "title": "Rating",
+          "type": "number"
+        },
+        "sentiment": {
+          "description": "Predicted sentiment",
+          "pattern": "^(Positive|Negative|Neutral)$",
+          "title": "Sentiment",
+          "type": "string"
+        },
+        "predicted_themes": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Predicted themes with scores (0.0-1.0)",
+          "title": "Predicted Themes",
+          "type": "object"
+        }
+      },
+      "required": [
+        "review_text",
+        "rating",
+        "sentiment",
+        "predicted_themes"
+      ],
+      "title": "PredictionOutput",
+      "type": "object"
+    },
+    "QualitativeSummary": {
+      "description": "Qualitative persona summary.",
+      "properties": {
+        "persona_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Persona summary",
+          "title": "Persona Summary"
+        },
+        "key_motivations": {
+          "description": "Key motivations",
+          "items": {
+            "type": "string"
+          },
+          "title": "Key Motivations",
+          "type": "array"
+        },
+        "common_praises": {
+          "description": "Common praises",
+          "items": {
+            "type": "string"
+          },
+          "title": "Common Praises",
+          "type": "array"
+        },
+        "common_criticisms": {
+          "description": "Common criticisms",
+          "items": {
+            "type": "string"
+          },
+          "title": "Common Criticisms",
+          "type": "array"
+        },
+        "core_characteristics": {
+          "description": "Core characteristics",
+          "items": {
+            "type": "string"
+          },
+          "title": "Core Characteristics",
+          "type": "array"
+        },
+        "potential_goals": {
+          "description": "Potential goals",
+          "items": {
+            "type": "string"
+          },
+          "title": "Potential Goals",
+          "type": "array"
+        }
+      },
+      "title": "QualitativeSummary",
+      "type": "object"
+    },
+    "QuantitativeSummary": {
+      "description": "Quantitative summary statistics.",
+      "properties": {
+        "average_rating": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Average rating",
+          "title": "Average Rating"
+        },
+        "sentiment_distribution_percent": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Sentiment distribution percentages",
+          "title": "Sentiment Distribution Percent",
+          "type": "object"
+        }
+      },
+      "title": "QuantitativeSummary",
+      "type": "object"
+    },
+    "ReviewPrediction": {
+      "description": "Single review prediction with actual and metrics.",
+      "properties": {
+        "product_description": {
+          "description": "Product description",
+          "title": "Product Description",
+          "type": "string"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Product category",
+          "title": "Category"
+        },
+        "asin": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Product ASIN",
+          "title": "Asin"
+        },
+        "timestamp": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Review timestamp",
+          "title": "Timestamp"
+        },
+        "prediction": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/PredictionOutput"
+            }
+          ],
+          "description": "LLM prediction"
+        },
+        "actual": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ActualReview"
+            }
+          ],
+          "description": "Actual/ground truth data"
+        },
+        "metrics": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/InitialPredictionsReviewMetrics"
+            }
+          ],
+          "description": "Metrics comparing prediction vs actual"
+        }
+      },
+      "required": [
+        "product_description",
+        "prediction",
+        "actual",
+        "metrics"
+      ],
+      "title": "ReviewPrediction",
+      "type": "object"
+    }
+  },
+  "description": "Schema for Initial Predictions learned artifact.\n\nContains predictions, actuals, and metrics for each review in a micro-cluster.\n\nExample:\n    {\n        \"metadata\": {\n            \"persona_name\": \"Practical DIY Fixers\",\n            \"micro_cluster_id\": \"cluster_5_micro_0\",\n            \"total_users_in_cluster\": 30,\n            \"total_reviews_from_cluster\": 182,\n            \"quantitative_summary\": {...},\n            \"qualitative_summary\": {...}\n        },\n        \"model_type_used\": \"enhanced_persona_micro_cluster\",\n        \"user_predictions\": {\n            \"user_id\": [\n                {\n                    \"product_description\": \"...\",\n                    \"category\": \"...\",\n                    \"prediction\": {...},\n                    \"actual\": {...},\n                    \"metrics\": {...}\n                }\n            ]\n        },\n        \"aggregate_scores\": {\n            \"rating_score\": [1.0, 0.25, ...],\n            ...\n        },\n        \"final_metrics\": {\n            \"rating_score\": {\"mean\": 0.86, \"std\": 0.26, \"count\": 182},\n            ...\n        }\n    }",
+  "example": {
+    "aggregate_scores": {},
+    "final_metrics": {},
+    "metadata": {
+      "micro_cluster_id": "cluster_5_micro_0",
+      "persona_name": "Practical DIY Fixers",
+      "total_reviews_from_cluster": 182,
+      "total_users_in_cluster": 30
+    },
+    "model_type_used": "enhanced_persona_micro_cluster",
+    "user_predictions": {}
+  },
+  "properties": {
+    "metadata": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/PredictionMetadata"
+        }
+      ],
+      "description": "Micro-cluster metadata"
+    },
+    "model_type_used": {
+      "description": "Model type used for predictions",
+      "title": "Model Type Used",
+      "type": "string"
+    },
+    "user_predictions": {
+      "additionalProperties": {
+        "items": {
+          "$ref": "#/$defs/ReviewPrediction"
+        },
+        "type": "array"
+      },
+      "description": "User predictions (user_id -> list of reviews)",
+      "title": "User Predictions",
+      "type": "object"
+    },
+    "aggregate_scores": {
+      "additionalProperties": {
+        "items": {
+          "type": "number"
+        },
+        "type": "array"
+      },
+      "description": "Raw arrays of metric values",
+      "title": "Aggregate Scores",
+      "type": "object"
+    },
+    "final_metrics": {
+      "additionalProperties": {
+        "$ref": "#/$defs/AggregateMetricStats"
+      },
+      "description": "Aggregated statistics for each metric",
+      "title": "Final Metrics",
+      "type": "object"
+    }
+  },
+  "required": [
+    "metadata",
+    "model_type_used",
+    "user_predictions",
+    "aggregate_scores",
+    "final_metrics"
+  ],
+  "title": "InitialPredictionsArtifact",
+  "type": "object"
+}

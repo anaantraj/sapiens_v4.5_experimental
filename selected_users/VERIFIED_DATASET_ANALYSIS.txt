@@ -1,0 +1,173 @@
+================================================================================
+VERIFIED DATASET ANALYSIS - FROM ACTUAL FILES
+================================================================================
+
+DATA SOURCE VERIFICATION
+--------------------------------------------------------------------------------
+Main file: all_selected_users.txt
+Analysis date: 1768217987.14
+Total lines parsed: 5,002 users
+
+OVERALL STATISTICS (FROM ACTUAL DATA)
+--------------------------------------------------------------------------------
+Total Unique Users: 5,002
+Total Reviews: 30,000
+Average Reviews per User: 6.00
+
+User Distribution by Number of Categories:
+  1-category users: 1,420 (28.4%)
+  2-category users: 3,403 (68.0%)
+  3-category users: 158 (3.2%)
+  4-category users: 17 (0.3%)
+  5-category users: 2 (0.0%)
+  6-category users: 2 (0.0%)
+
+================================================================================
+CATEGORY BREAKDOWN (FROM ACTUAL DATA)
+================================================================================
+
+BEAUTY
+--------------------------------------------------------------------------------
+  Total Users: 324
+  Total Reviews: 4,000
+  Average Reviews per User: 12.35
+  Single-category users: 138 (42.6%)
+  Multi-category users: 186 (57.4%)
+  File verification: ✓ MATCH
+
+APPLIANCES
+--------------------------------------------------------------------------------
+  Total Users: 520
+  Total Reviews: 4,868
+  Average Reviews per User: 9.36
+  Single-category users: 400 (76.9%)
+  Multi-category users: 120 (23.1%)
+  File verification: ✓ MATCH
+
+CLOTHING
+--------------------------------------------------------------------------------
+  Total Users: 2,671
+  Total Reviews: 5,381
+  Average Reviews per User: 2.01
+  Single-category users: 1 (0.0%)
+  Multi-category users: 2,670 (100.0%)
+  File verification: ✓ MATCH
+
+MUSIC
+--------------------------------------------------------------------------------
+  Total Users: 389
+  Total Reviews: 2,500
+  Average Reviews per User: 6.43
+  Single-category users: 363 (93.3%)
+  Multi-category users: 26 (6.7%)
+  File verification: ✓ MATCH
+
+HEALTH
+--------------------------------------------------------------------------------
+  Total Users: 209
+  Total Reviews: 2,500
+  Average Reviews per User: 11.96
+  Single-category users: 56 (26.8%)
+  Multi-category users: 153 (73.2%)
+  File verification: ✓ MATCH
+
+SOFTWARE
+--------------------------------------------------------------------------------
+  Total Users: 2,463
+  Total Reviews: 5,373
+  Average Reviews per User: 2.18
+  Single-category users: 132 (5.4%)
+  Multi-category users: 2,331 (94.6%)
+  File verification: ✓ MATCH
+
+GAMES
+--------------------------------------------------------------------------------
+  Total Users: 2,214
+  Total Reviews: 5,378
+  Average Reviews per User: 2.43
+  Single-category users: 330 (14.9%)
+  Multi-category users: 1,884 (85.1%)
+  File verification: ✓ MATCH
+
+================================================================================
+SUMMARY TABLE
+================================================================================
+
+Category       Users     Reviews     Single-Cat   Multi-Cat   Avg/User  
+--------------------------------------------------------------------------------
+Beauty         324       4,000       138          186         12.35     
+Appliances     520       4,868       400          120         9.36      
+Clothing       2,671     5,381       1            2,670       2.01      
+Music          389       2,500       363          26          6.43      
+Health         209       2,500       56           153         11.96     
+Software       2,463     5,373       132          2,331       2.18      
+Games          2,214     5,378       330          1,884       2.43      
+
+================================================================================
+REVIEW DISTRIBUTION PER USER
+================================================================================
+
+Reviews        Users          Percentage     Cumulative %   
+--------------------------------------------------------------------------------
+1              413            8.26           8.26           
+2              1,709          34.17          42.42          
+3              157            3.14           45.56          
+4              350            7.00           52.56          
+5              171            3.42           55.98          
+6              442            8.84           64.81          
+7              124            2.48           67.29          
+8              107            2.14           69.43          
+9              122            2.44           71.87          
+10             759            15.17          87.05          
+11             95             1.90           88.94          
+12             79             1.58           90.52          
+13             70             1.40           91.92          
+14             36             0.72           92.64          
+15             200            4.00           96.64          
+16             63             1.26           97.90          
+17             14             0.28           98.18          
+18             5              0.10           98.28          
+19             6              0.12           98.40          
+20             1              0.02           98.42          
+21             10             0.20           98.62          
+22             3              0.06           98.68          
+23             2              0.04           98.72          
+24             2              0.04           98.76          
+25             3              0.06           98.82          
+26             10             0.20           99.02          
+27             4              0.08           99.10          
+28             7              0.14           99.24          
+29             5              0.10           99.34          
+31             2              0.04           99.38          
+32             4              0.08           99.46          
+33             2              0.04           99.50          
+34             6              0.12           99.62          
+35             1              0.02           99.64          
+36             3              0.06           99.70          
+38             2              0.04           99.74          
+40             2              0.04           99.78          
+42             2              0.04           99.82          
+46             2              0.04           99.86          
+48             1              0.02           99.88          
+54             1              0.02           99.90          
+58             1              0.02           99.92          
+61             1              0.02           99.94          
+62             1              0.02           99.96          
+63             1              0.02           99.98          
+67             1              0.02           100.00         
+
+================================================================================
+VERIFICATION SUMMARY
+================================================================================
+
+✓ Total Users: 5,002
+✓ Total Reviews: 30,000
+✓ Beauty Reviews: 4,000
+✓ Music Reviews: 2,500
+✓ Clothing Reviews: 5,381
+✓ Games Reviews: 5,378
+✓ Software Reviews: 5,373
+✓ Health Reviews: 2,500
+✓ Appliances Reviews: 4,868
+
+================================================================================

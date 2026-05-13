@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SegmentUserDetailsArtifact",
+  "description": "Schema for Segment User Details learned artifact, containing users with full review data grouped by segment/cluster.",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "object",
+      "properties": {
+        "reviews": {
+          "type": "array",
+          "description": "List of reviews for this user",
+          "items": {
+            "type": "object",
+            "properties": {
+              "product_description": {
+                "type": "string",
+                "description": "Product description or title"
+              },
+              "review_text": {
+                "type": "string",
+                "description": "Review text content"
+              },
+              "rating": {
+                "type": ["number", "null"],
+                "description": "Product rating (1-5)"
+              },
+              "category": {
+                "type": ["string", "null"],
+                "description": "Product category"
+              },
+              "main_category": {
+                "type": ["string", "null"],
+                "description": "Main product category"
+              },
+              "timestamp": {
+                "type": ["number", "string", "null"],
+                "description": "Review timestamp"
+              },
+              "predicted_themes": {
+                "type": "array",
+                "description": "List of predicted themes/topics",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "topic_probabilities": {
+                "type": "object",
+                "description": "Topic probabilities dictionary",
+                "patternProperties": {
+                  "^.+$": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                  }
+                }
+              },
+              "primary_topic": {
+                "type": ["string", "null"],
+                "description": "Primary topic"
+              },
+              "sentiment": {
+                "type": ["string", "null"],
+                "description": "Sentiment classification",
+                "enum": ["Positive", "Negative", "Neutral", null]
+              },
+              "asin": {
+                "type": ["string", "null"],
+                "description": "Product ASIN"
+              },
+              "cluster": {
+                "type": "integer",
+                "description": "Segment/cluster number"
+              },
+              "overall_characteristics": {
+                "type": "object",
+                "description": "Overall characteristics at review level"
+              },
+              "category_characteristics": {
+                "type": "object",
+                "description": "Category-specific characteristics at review level"
+              }
+            },
+            "required": ["product_description", "review_text", "cluster"],
+            "additionalProperties": true
+          }
+        },
+        "overall_characteristics": {
+          "type": "object",
+          "description": "User-level overall characteristics"
+        },
+        "category_characteristics": {
+          "type": "object",
+          "description": "User-level category-specific characteristics"
+        },
+        "cluster": {
+          "type": "integer",
+          "description": "Segment/cluster number"
+        },
+        "num_reviews": {
+          "type": "integer",
+          "description": "Number of reviews for this user",
+          "minimum": 0
+        }
+      },
+      "required": ["reviews", "cluster", "num_reviews"],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
+

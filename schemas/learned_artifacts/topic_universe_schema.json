@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Topic Universe Schema",
+  "description": "Schema for topic universe learned artifact - contains topics for each category",
+  "type": "object",
+  "additionalProperties": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "minLength": 1
+    },
+    "minItems": 1
+  },
+  "minProperties": 1,
+  "examples": [
+    {
+      "Clothing_Shoes_and_Jewelry": [
+        "Quality",
+        "Comfort",
+        "Style",
+        "Durability",
+        "Fit"
+      ],
+      "Electronics": [
+        "Performance",
+        "Battery Life",
+        "Build Quality",
+        "Value for Money"
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RefinedCharacteristicsArtifact",
+  "description": "Schema for Refined Characteristics learned artifact, containing persona characteristics refined through SGO training feedback loops.",
+  "type": "object",
+  "properties": {
+    "tribe_id": {
+      "type": "string",
+      "description": "Unique identifier for the tribe (micro cluster)"
+    },
+    "refined_characteristics": {
+      "type": "object",
+      "properties": {
+        "key_motivations": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Simple string format characteristic"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "characteristic": {
+                    "type": "string",
+                    "description": "The characteristic text"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Confidence score (0.0-1.0)"
+                  },
+                  "reasoning_trace": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Step-by-step reasoning trace"
+                  },
+                  "evidence_indices": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "Indices of batch analyses that support this characteristic"
+                  },
+                  "evidence": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "analysis_index": {
+                          "type": "integer"
+                        },
+                        "analysis_text": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "description": "Evidence details from batch analyses"
+                  },
+                  "support_count": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Number of analyses supporting this characteristic"
+                  }
+                },
+                "required": ["characteristic"],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "description": "List of key motivations for this persona"
+        },
+        "common_praises": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "string"},
+              {
+                "type": "object",
+                "properties": {
+                  "characteristic": {"type": "string"},
+                  "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                  "reasoning_trace": {"type": "array", "items": {"type": "string"}},
+                  "evidence_indices": {"type": "array", "items": {"type": "integer"}},
+                  "evidence": {"type": "array"},
+                  "support_count": {"type": "integer", "minimum": 0}
+                },
+                "required": ["characteristic"]
+              }
+            ]
+          },
+          "description": "List of common praises for this persona"
+        },
+        "common_criticisms": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "string"},
+              {
+                "type": "object",
+                "properties": {
+                  "characteristic": {"type": "string"},
+                  "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                  "reasoning_trace": {"type": "array", "items": {"type": "string"}},
+                  "evidence_indices": {"type": "array", "items": {"type": "integer"}},
+                  "evidence": {"type": "array"},
+                  "support_count": {"type": "integer", "minimum": 0}
+                },
+                "required": ["characteristic"]
+              }
+            ]
+          },
+          "description": "List of common criticisms for this persona"
+        },
+        "core_characteristics": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "string"},
+              {
+                "type": "object",
+                "properties": {
+                  "characteristic": {"type": "string"},
+                  "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                  "reasoning_trace": {"type": "array", "items": {"type": "string"}},
+                  "evidence_indices": {"type": "array", "items": {"type": "integer"}},
+                  "evidence": {"type": "array"},
+                  "support_count": {"type": "integer", "minimum": 0}
+                },
+                "required": ["characteristic"]
+              }
+            ]
+          },
+          "description": "List of core characteristics for this persona"
+        },
+        "potential_goals": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "string"},
+              {
+                "type": "object",
+                "properties": {
+                  "characteristic": {"type": "string"},
+                  "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                  "reasoning_trace": {"type": "array", "items": {"type": "string"}},
+                  "evidence_indices": {"type": "array", "items": {"type": "integer"}},
+                  "evidence": {"type": "array"},
+                  "support_count": {"type": "integer", "minimum": 0}
+                },
+                "required": ["characteristic"]
+              }
+            ]
+          },
+          "description": "List of potential goals for this persona"
+        }
+      },
+      "required": ["key_motivations", "common_praises", "common_criticisms", "core_characteristics", "potential_goals"],
+      "additionalProperties": false
+    },
+    "refinement_metadata": {
+      "type": "object",
+      "properties": {
+        "num_analyses": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of batch analyses used"
+        },
+        "refinement_round": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Iteration/round number"
+        },
+        "consolidation_applied": {
+          "type": "boolean",
+          "description": "Whether characteristics were consolidated"
+        }
+      },
+      "required": ["num_analyses", "refinement_round"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["tribe_id", "refined_characteristics", "refinement_metadata"],
+  "additionalProperties": false
+}
+

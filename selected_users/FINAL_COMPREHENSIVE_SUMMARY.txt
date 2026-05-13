@@ -1,0 +1,250 @@
+================================================================================
+FINAL COMPREHENSIVE DATASET SUMMARY REPORT
+================================================================================
+
+OVERALL STATISTICS
+--------------------------------------------------------------------------------
+Total Unique Users: 5,002
+Total Reviews: 30,000
+Average Reviews per User: 6.00
+
+USER TYPE BREAKDOWN
+--------------------------------------------------------------------------------
+Single-category users: 1,420 (28.4%)
+Multi-category users: 3,582 (71.6%)
+
+USER DISTRIBUTION BY NUMBER OF CATEGORIES
+--------------------------------------------------------------------------------
+  1-category users: 1,420 (28.4%)
+  2-category users: 3,403 (68.0%)
+  3-category users: 158 (3.2%)
+  4-category users: 17 (0.3%)
+  5-category users: 2 (0.0%)
+  6-category users: 2 (0.0%)
+
+================================================================================
+DETAILED BREAKDOWN BY CATEGORY
+================================================================================
+
+APPLIANCES
+--------------------------------------------------------------------------------
+  Total Users in Category: 520
+  Total Reviews in Category: 4,868
+  Average Reviews per User: 9.36
+
+  User Type Breakdown:
+    Single-category users: 400 (76.9%)
+    Multi-category users: 120 (23.1%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 400 (76.9%) - 4,290 reviews
+    2-category users: 91 (17.5%) - 439 reviews
+    3-category users: 17 (3.3%) - 85 reviews
+    4-category users: 8 (1.5%) - 35 reviews
+    5-category users: 2 (0.4%) - 11 reviews
+    6-category users: 2 (0.4%) - 8 reviews
+
+BEAUTY
+--------------------------------------------------------------------------------
+  Total Users in Category: 324
+  Total Reviews in Category: 4,000
+  Average Reviews per User: 12.35
+
+  User Type Breakdown:
+    Single-category users: 138 (42.6%)
+    Multi-category users: 186 (57.4%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 138 (42.6%) - 1,924 reviews
+    2-category users: 126 (38.9%) - 1,406 reviews
+    3-category users: 41 (12.7%) - 459 reviews
+    4-category users: 15 (4.6%) - 167 reviews
+    5-category users: 2 (0.6%) - 23 reviews
+    6-category users: 2 (0.6%) - 21 reviews
+
+CLOTHING
+--------------------------------------------------------------------------------
+  Total Users in Category: 2,671
+  Total Reviews in Category: 5,381
+  Average Reviews per User: 2.01
+
+  User Type Breakdown:
+    Single-category users: 1 (0.0%)
+    Multi-category users: 2,670 (100.0%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 1 (0.0%) - 1 reviews
+    2-category users: 2,537 (95.0%) - 5,115 reviews
+    3-category users: 123 (4.6%) - 249 reviews
+    4-category users: 6 (0.2%) - 8 reviews
+    5-category users: 2 (0.1%) - 2 reviews
+    6-category users: 2 (0.1%) - 6 reviews
+
+GAMES
+--------------------------------------------------------------------------------
+  Total Users in Category: 2,214
+  Total Reviews in Category: 5,378
+  Average Reviews per User: 2.43
+
+  User Type Breakdown:
+    Single-category users: 330 (14.9%)
+    Multi-category users: 1,884 (85.1%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 330 (14.9%) - 450 reviews
+    2-category users: 1,739 (78.5%) - 4,555 reviews
+    3-category users: 129 (5.8%) - 328 reviews
+    4-category users: 13 (0.6%) - 33 reviews
+    5-category users: 1 (0.0%) - 5 reviews
+    6-category users: 2 (0.1%) - 7 reviews
+
+HEALTH
+--------------------------------------------------------------------------------
+  Total Users in Category: 209
+  Total Reviews in Category: 2,500
+  Average Reviews per User: 11.96
+
+  User Type Breakdown:
+    Single-category users: 56 (26.8%)
+    Multi-category users: 153 (73.2%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 56 (26.8%) - 655 reviews
+    2-category users: 93 (44.5%) - 1,078 reviews
+    3-category users: 39 (18.7%) - 499 reviews
+    4-category users: 17 (8.1%) - 196 reviews
+    5-category users: 2 (1.0%) - 17 reviews
+    6-category users: 2 (1.0%) - 55 reviews
+
+MUSIC
+--------------------------------------------------------------------------------
+  Total Users in Category: 389
+  Total Reviews in Category: 2,500
+  Average Reviews per User: 6.43
+
+  User Type Breakdown:
+    Single-category users: 363 (93.3%)
+    Multi-category users: 26 (6.7%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 363 (93.3%) - 2,386 reviews
+    2-category users: 21 (5.4%) - 91 reviews
+    3-category users: 5 (1.3%) - 23 reviews
+
+SOFTWARE
+--------------------------------------------------------------------------------
+  Total Users in Category: 2,463
+  Total Reviews in Category: 5,373
+  Average Reviews per User: 2.18
+
+  User Type Breakdown:
+    Single-category users: 132 (5.4%)
+    Multi-category users: 2,331 (94.6%)
+
+  Users by Category Count (how many categories each user appears in):
+    1-category users: 132 (5.4%) - 170 reviews
+    2-category users: 2,199 (89.3%) - 4,935 reviews
+    3-category users: 120 (4.9%) - 248 reviews
+    4-category users: 9 (0.4%) - 13 reviews
+    5-category users: 1 (0.0%) - 1 reviews
+    6-category users: 2 (0.1%) - 6 reviews
+
+================================================================================
+SUMMARY TABLE
+================================================================================
+
+Category        Users      Reviews      Single-Cat   Multi-Cat    Avg/User  
+--------------------------------------------------------------------------------
+Appliances      520        4,868        400          120          9.36      
+Beauty          324        4,000        138          186          12.35     
+Clothing        2,671      5,381        1            2,670        2.01      
+Games           2,214      5,378        330          1,884        2.43      
+Health          209        2,500        56           153          11.96     
+Music           389        2,500        363          26           6.43      
+Software        2,463      5,373        132          2,331        2.18      
+
+================================================================================
+REVIEW DISTRIBUTION PER USER
+================================================================================
+
+Reviews per User     Number of Users      Percentage      Cumulative %   
+--------------------------------------------------------------------------------
+1                    413                  8.26            8.26           
+2                    1,709                34.17           42.42          
+3                    157                  3.14            45.56          
+4                    350                  7.00            52.56          
+5                    171                  3.42            55.98          
+6                    442                  8.84            64.81          
+7                    124                  2.48            67.29          
+8                    107                  2.14            69.43          
+9                    122                  2.44            71.87          
+10                   759                  15.17           87.05          
+11                   95                   1.90            88.94          
+12                   79                   1.58            90.52          
+13                   70                   1.40            91.92          
+14                   36                   0.72            92.64          
+15                   200                  4.00            96.64          
+16                   63                   1.26            97.90          
+17                   14                   0.28            98.18          
+18                   5                    0.10            98.28          
+19                   6                    0.12            98.40          
+20                   1                    0.02            98.42          
+21                   10                   0.20            98.62          
+22                   3                    0.06            98.68          
+23                   2                    0.04            98.72          
+24                   2                    0.04            98.76          
+25                   3                    0.06            98.82          
+26                   10                   0.20            99.02          
+27                   4                    0.08            99.10          
+28                   7                    0.14            99.24          
+29                   5                    0.10            99.34          
+31                   2                    0.04            99.38          
+32                   4                    0.08            99.46          
+33                   2                    0.04            99.50          
+34                   6                    0.12            99.62          
+35                   1                    0.02            99.64          
+36                   3                    0.06            99.70          
+38                   2                    0.04            99.74          
+40                   2                    0.04            99.78          
+42                   2                    0.04            99.82          
+46                   2                    0.04            99.86          
+48                   1                    0.02            99.88          
+54                   1                    0.02            99.90          
+58                   1                    0.02            99.92          
+61                   1                    0.02            99.94          
+62                   1                    0.02            99.96          
+63                   1                    0.02            99.98          
+67                   1                    0.02            100.00         
+
+REVIEW DISTRIBUTION STATISTICS
+--------------------------------------------------------------------------------
+Minimum reviews per user: 1
+Maximum reviews per user: 67
+25th percentile: 2
+50th percentile (median): 4
+75th percentile: 10
+
+USERS BY REVIEW RANGE
+--------------------------------------------------------------------------------
+  1-4 reviews (flexible)                    2,629 users ( 52.6%)
+  5-9 reviews                                 966 users ( 19.3%)
+  10-15 reviews (standard single-category)  1,239 users ( 24.8%)
+  16-20 reviews                                89 users (  1.8%)
+  21-30 reviews                                46 users (  0.9%)
+  31-50 reviews                                27 users (  0.5%)
+  51-100 reviews                                6 users (  0.1%)
+
+================================================================================
+KEY HIGHLIGHTS
+================================================================================
+
+✓ Total Users: 5,002 (target: 5,000)
+✓ Total Reviews: 30,000 (target: 30,000)
+✓ Beauty: 4,000 reviews (target: 4,000)
+✓ Music: 2,500 reviews (target: 2,500)
+✓ All categories within 2,500-12,000 range
+✓ Multi-category users prioritized: 71.6% of users
+✓ 52.6% of users have flexible reviews (1-4 reviews)
+
+================================================================================
+

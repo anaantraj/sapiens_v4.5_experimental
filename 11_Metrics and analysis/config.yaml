@@ -1,0 +1,126 @@
+stage: "Metrics and analysis"
+method: "jsd_calculation"
+
+# Topic matching / embedding configuration
+metrics:
+  fuzzy_match_threshold: 0.8
+  embedding_similarity_threshold: 0.8
+
+openai:
+  embedding_model: "text-embedding-3-small"
+
+# Input Artifacts from W&B
+# These artifacts contain predictions with probability distributions
+input_artifacts:
+  # Pre-SGO predictions with context (baseline predictions)
+  pre_sgo_context: "pre_sgo_context_all_topics_v6_gpt_5_mini_v4:latest"
+  
+  # Pre-SGO predictions without context (for comparison)
+  
+  # Post-SGO predictions (SGO corrected predictions)
+  post_sgo_context: "sgo_training_results_v6:latest"
+  
+  # Baseline predictions (user history method)
+  user_history: "baseline_predictions_o3_history_logprobs_v4:latest"  # User history baseline predictions artifact name
+  
+  # Baseline predictions (user backstory method)
+  user_backstory: "baseline_predictions_o3_backstory_logprobs_v4:latest"
+
+# Output Configuration
+# These directories are uploaded to W&B (see output_artifacts below).
+output:
+  directory: "Metrics and analysis/artifacts"  # Base directory
+  jsd_directory: "Metrics and analysis/artifacts/jsd"   # → W&B artifact jsd_metrics_and_graphs
+  wd_directory: "Metrics and analysis/artifacts/wd"     # → W&B artifact wd_metrics_and_graphs
+  jsd_results_context: "jsd_results_pre_sgo_context.json"
+
+# JSD Calculation Parameters
+jsd:
+  epsilon: 1e-10  # Small value to avoid log(0)
+  normalize: true  # Normalize distributions before cpalculating JSD
+  mode: "2"  # "1" for individual graphs, "2" for 2-way comparison, "3" for 3-way, "4" for 4-way
+  # Specify which artifacts to process/compare (use keys from input_artifacts section)
+  # For mode "1": specify one artifact, e.g., ["user_history"]
+  # For mode "2": specify two artifacts, e.g., ["pre_sgo_context", "post_sgo_context"]
+  # For mode "3": specify three artifacts, e.g., ["user_history", "pre_sgo_context", "post_sgo_context"]
+  # For mode "4": specify four artifacts, e.g., ["user_history", "user_backstory", "pre_sgo_context", "post_sgo_context"]
+  artifacts: ["pre_sgo_context",  "post_sgo_context"]  # List of artifact keys to process/compare
+
+# Visualization Parameters
+visualization:
+  # JSD Distribution Histogram
+  histogram:
+    bins: 50
+    figsize: [12, 6]
+    dpi: 300
+  
+  # JSD Box Plot
+  boxplot:
+    figsize: [10, 6]
+    dpi: 300
+  
+  # JSD by Category
+  by_category:
+    figsize: [14, 8]
+    dpi: 300
+  
+  # JSD Statistics Table
+  statistics_table:
+    figsize: [12, 8]
+    dpi: 300
+
+# Processing Configuration
+processing:
+  # Process all JSON files in artifact directories
+  file_pattern: "*.json"
+  # Maximum number of reviews to process (None for all)
+  max_reviews: null
+  # Parallel processing
+  num_workers: 4
+
+# W&B (Weights & Biases)
+# When a script runs, global config.yaml and this stage config are uploaded to the run automatically.
+# Outputs from each script are uploaded as artifacts (see output_artifacts). artifact_type = type this stage produces (dataset | model | result).
+collection: "Metrics"
+artifact_type: "result"
+job_type: "metrics"
+# Output artifacts uploaded to W&B by this stage's scripts (one name per script output)
+output_artifacts:
+  jsd_metrics: "jsd_metrics_and_graphs"                           # calculate_jsd_pre_sgo.py
+  wd_metrics: "wd_metrics_and_graphs"                           # calculate_wd_pre_post_sgo.py
+  metrics_pre_post_sgo: "metrics_pre_post_sgo_graphs"             # calculate_metrics_pre_post_sgo.py
+  recall_at_k: "recall_at_k_results"                             # calculate_recall_at_k.py
+  jsd_predictions_vs_gt: "jsd_predictions_vs_ground_truth"        # calculate_jsd_wd_predictions_vs_ground_truth.py (JSD dir)
+  wd_predictions_vs_gt: "wd_predictions_vs_ground_truth"         # calculate_jsd_wd_predictions_vs_ground_truth.py (WD dir)
+  jsd_comparison_graphs: "jsd_comparison_graphs"                  # generate_jsd_comparison_graphs.py
+
+# WD (Wasserstein Distance) Calculation Parameters
+wd:
+  epsilon: 1e-10  # Small value to avoid log(0)
+  normalize: true  # Normalize distributions before calculating WD
+  use_optimal_transport: true  # Use POT library for exact WD calculation
+  mode: "2"  # "1" for individual graphs, "2" for 2-way comparison, "3" for 3-way, "4" for 4-way
+  # Specify which artifacts to process/compare (use keys from input_artifacts section)
+  # For mode "1": specify one artifact, e.g., ["user_history"]
+  # For mode "2": specify two artifacts, e.g., ["pre_sgo_context", "post_sgo_context"]
+  # For mode "3": specify three artifacts, e.g., ["user_history", "pre_sgo_context", "post_sgo_context"]
+  # For mode "4": specify four artifacts, e.g., ["user_history", "user_backstory", "pre_sgo_context", "post_sgo_context"]
+  artifacts: ["pre_sgo_context", "post_sgo_context"]  # List of artifact keys to process/compare
+
+# Recall@K Calculation Parameters
+recall_at_k:
+  # Ground truth threshold for topic probabilities (BEFORE normalization)
+  # Topics with probability >= threshold are considered ground truth
+  ground_truth_threshold: 0.65
+  # Maximum number of reviews to process (None for all)
+  max_reviews: null
+  # Path to train deltas files directory (optional, defaults to 07_sgo_training/artifacts/sgo_train_final_predictions_refined_chars/deltas)
+  # Train deltas files contain both predictions and ground truth for train set
+  train_deltas_path: "07_sgo_training/artifacts/sgo_train_final_predictions_refined_chars/deltas"
+  # Path to test deltas files directory (optional, defaults to checking common test directories)
+  # Test deltas files contain both predictions and ground truth for test set
+  test_deltas_path: "07_sgo_training/artifacts/sgo_train_final_predictions_refined_chars_worst/deltas"
+  # Path to custom prediction files directory (optional)
+  # Custom prediction files should have user_predictions structure with prediction.predicted_themes and actual.topic_probabilities
+  # These files will be matched against train set ground truth for recall calculation
+  custom_prediction_path: null

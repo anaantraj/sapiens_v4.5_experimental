@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BaselinePredictionsArtifact",
+  "description": "Schema for Baseline Predictions learned artifact, containing review predictions from baseline methods (history/backstory).",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "Unique user identifier"
+        },
+        "review_id": {
+          "type": "string",
+          "description": "Unique review identifier"
+        },
+        "review_index": {
+          "type": "integer",
+          "description": "Index of review in user's review history",
+          "minimum": 0
+        },
+        "review_type": {
+          "type": "string",
+          "enum": ["first", "intermediate", "last"],
+          "description": "Type of review based on position in history"
+        },
+        "product_description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "category": {
+          "type": "string",
+          "description": "Product category"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["history", "backstory"],
+          "description": "Prediction method used"
+        },
+        "model": {
+          "type": "string",
+          "enum": ["o3", "claude"],
+          "description": "LLM model used"
+        },
+        "prediction": {
+          "type": "object",
+          "properties": {
+            "review_text": {
+              "type": "string",
+              "description": "Predicted review text"
+            },
+            "rating": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 5,
+              "description": "Predicted rating (1-5)"
+            },
+            "sentiment": {
+              "type": "string",
+              "enum": ["Positive", "Negative", "Neutral"],
+              "description": "Predicted sentiment"
+            },
+            "predicted_themes": {
+              "type": "object",
+              "patternProperties": {
+                "^.+$": {
+                  "type": "number",
+                  "minimum": 0.0,
+                  "maximum": 1.0
+                }
+              },
+              "description": "Predicted theme scores (theme name -> confidence score)"
+            }
+          },
+          "required": ["review_text", "rating", "sentiment", "predicted_themes"],
+          "additionalProperties": false
+        },
+        "actual": {
+          "type": "object",
+          "properties": {
+            "review_text": {
+              "type": "string",
+              "description": "Actual review text"
+            },
+            "rating": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 5,
+              "description": "Actual rating"
+            },
+            "sentiment": {
+              "type": "string",
+              "enum": ["Positive", "Negative", "Neutral"],
+              "description": "Actual sentiment"
+            },
+            "themes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Actual themes from review"
+            }
+          },
+          "required": ["review_text", "rating", "sentiment", "themes"],
+          "additionalProperties": false
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "overall_accuracy": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Overall accuracy score"
+            },
+            "rating_score": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Rating prediction accuracy"
+            },
+            "sentiment_score": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Sentiment prediction accuracy"
+            },
+            "recall@max(3,k)": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Theme recall score"
+            }
+          },
+          "required": ["overall_accuracy", "rating_score", "sentiment_score", "recall@max(3,k)"],
+          "additionalProperties": false
+        },
+        "cluster_name": {
+          "type": ["string", "null"],
+          "description": "Macro cluster name"
+        },
+        "micro_cluster_id": {
+          "type": ["string", "null"],
+          "description": "Micro cluster identifier"
+        },
+        "persona_name": {
+          "type": ["string", "null"],
+          "description": "Persona name"
+        }
+      },
+      "required": ["user_id", "review_index", "product_description", "category", "method", "model", "prediction", "actual", "metrics"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

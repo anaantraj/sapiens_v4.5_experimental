@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserReviewHistoryArtifact",
+  "description": "Schema for User Review History learned artifact, containing review history for each user.",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "Unique user identifier"
+        },
+        "review_history": {
+          "type": "array",
+          "description": "List of reviews",
+          "items": {
+            "type": "object",
+            "properties": {
+              "review_id": {
+                "type": "string",
+                "description": "Unique review identifier"
+              },
+              "product_description": {
+                "type": "string",
+                "description": "Product description or title"
+              },
+              "review_text": {
+                "type": "string",
+                "description": "Review text content"
+              }
+            },
+            "required": ["review_id", "product_description", "review_text"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["user_id", "review_history"]
+    }
+  },
+  "additionalProperties": false
+}
+

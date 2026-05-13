@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserBackstoryArtifact",
+  "description": "Schema for User Backstory learned artifact, containing user characteristics extracted from reviews.",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Unique user identifier",
+      "minLength": 1
+    },
+    "overall_characteristics": {
+      "type": "object",
+      "description": "Overall user characteristics from LLM analysis",
+      "properties": {
+        "influencing_characteristics_summary": {
+          "type": "string",
+          "description": "A 2-3 sentence paragraph synthesizing the core factors that motivate this user's reviews",
+          "minLength": 1
+        }
+      },
+      "required": ["influencing_characteristics_summary"],
+      "additionalProperties": true
+    },
+    "category_characteristics": {
+      "type": "object",
+      "description": "Category-specific characteristics (if user reviews multiple categories)",
+      "patternProperties": {
+        "^.+$": {
+          "type": "object",
+          "properties": {
+            "influencing_characteristics_summary": {
+              "type": "string",
+              "description": "Category-specific characteristics summary",
+              "minLength": 1
+            }
+          },
+          "required": ["influencing_characteristics_summary"],
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "num_categories": {
+      "type": "integer",
+      "description": "Number of categories the user has reviewed",
+      "minimum": 1
+    },
+    "categories": {
+      "type": "array",
+      "description": "List of categories the user has reviewed",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["user_id", "overall_characteristics", "num_categories", "categories"]
+}
+

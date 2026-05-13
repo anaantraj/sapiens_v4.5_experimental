@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TribeSeedCharacteristicsArtifact",
+  "description": "Schema for Tribe Seed Characteristics learned artifact, containing consolidated persona characteristics for each tribe.",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "object",
+      "properties": {
+        "tribe_id": {
+          "type": "string",
+          "description": "Tribe (micro cluster) identifier"
+        },
+        "persona_name": {
+          "type": ["string", "null"],
+          "description": "Persona name for this tribe"
+        },
+        "micro_cluster_id": {
+          "type": ["string", "null"],
+          "description": "Micro cluster identifier (same as tribe_id)"
+        },
+        "total_users_in_cluster": {
+          "type": ["integer", "null"],
+          "description": "Total number of users in this tribe",
+          "minimum": 0
+        },
+        "total_reviews_from_cluster": {
+          "type": ["integer", "null"],
+          "description": "Total number of reviews from this tribe",
+          "minimum": 0
+        },
+        "quantitative_summary": {
+          "type": "object",
+          "properties": {
+            "average_rating": {
+              "type": ["string", "number", "null"],
+              "description": "Average rating"
+            },
+            "sentiment_distribution_percent": {
+              "type": "object",
+              "description": "Sentiment distribution as percentages",
+              "patternProperties": {
+                "^.+$": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "qualitative_summary": {
+          "type": "object",
+          "properties": {
+            "persona_summary": {
+              "type": ["string", "null"],
+              "description": "Persona summary text"
+            },
+            "key_motivations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of key motivations"
+            },
+            "common_praises": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of common praises"
+            },
+            "common_criticisms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of common criticisms"
+            },
+            "core_characteristics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of core characteristics"
+            },
+            "potential_goals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of potential goals"
+            }
+          },
+          "additionalProperties": true
+        },
+        "justification": {
+          "type": ["string", "null"],
+          "description": "Justification for the persona name"
+        },
+        "key_topics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of key topics/themes"
+        },
+        "persona_summary": {
+          "type": ["string", "null"],
+          "description": "Persona summary (duplicate of qualitative_summary.persona_summary for convenience)"
+        },
+        "key_motivations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Key motivations (duplicate for convenience)"
+        },
+        "common_praises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Common praises (duplicate for convenience)"
+        },
+        "common_criticisms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Common criticisms (duplicate for convenience)"
+        },
+        "core_characteristics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Core characteristics (duplicate for convenience)"
+        },
+        "potential_goals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Potential goals (duplicate for convenience)"
+        },
+        "member_user_characteristics": {
+          "type": "array",
+          "description": "List of member user characteristics",
+          "items": {
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "type": "string",
+                "description": "User identifier"
+              },
+              "characteristic_summary": {
+                "type": "string",
+                "description": "User's characteristic summary"
+              }
+            },
+            "required": ["user_id", "characteristic_summary"],
+            "additionalProperties": true
+          }
+        },
+        "members_grouped_by_user": {
+          "type": "object",
+          "description": "Reviews grouped by user_id. Format: {user_id: [list of review objects]}",
+          "patternProperties": {
+            "^.+$": {
+              "type": "array",
+              "description": "List of reviews for this user",
+              "items": {
+                "type": "object",
+                "description": "Review object"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["tribe_id", "persona_name"],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
+

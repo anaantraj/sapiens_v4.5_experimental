@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserSegmentsArtifact",
+  "description": "Schema for User Segments learned artifact, containing macro cluster (segment) assignments for each user.",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "Unique user identifier"
+        },
+        "segment_id": {
+          "type": "string",
+          "description": "Segment (macro cluster) identifier"
+        },
+        "segment_name": {
+          "type": ["string", "null"],
+          "description": "Optional segment name"
+        },
+        "user_embedding": {
+          "type": "array",
+          "description": "User embedding vector",
+          "items": {
+            "type": "number"
+          }
+        },
+        "cluster_metadata": {
+          "type": "object",
+          "properties": {
+            "silhouette_score": {
+              "type": "number",
+              "description": "Silhouette score for this cluster"
+            },
+            "cluster_size": {
+              "type": "integer",
+              "description": "Number of users in this cluster",
+              "minimum": 0
+            },
+            "davies_bouldin_score": {
+              "type": ["number", "null"],
+              "description": "Davies-Bouldin score for clustering quality"
+            },
+            "balance_ratio": {
+              "type": ["number", "null"],
+              "description": "Balance ratio (min/max cluster sizes)"
+            }
+          },
+          "required": ["silhouette_score", "cluster_size"],
+          "additionalProperties": true
+        }
+      },
+      "required": ["user_id", "segment_id", "user_embedding", "cluster_metadata"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

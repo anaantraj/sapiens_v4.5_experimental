@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserTribeArtifact",
+  "description": "Schema for User Tribe learned artifact, containing micro cluster (tribe) assignments for each user.",
+  "type": "object",
+  "patternProperties": {
+    "^.+$": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "Unique user identifier"
+        },
+        "segment_id": {
+          "type": "string",
+          "description": "Segment (macro cluster) identifier"
+        },
+        "tribe_id": {
+          "type": "string",
+          "description": "Tribe (micro cluster) identifier"
+        },
+        "tribe_name": {
+          "type": ["string", "null"],
+          "description": "Tribe persona name"
+        },
+        "similarity_score": {
+          "type": ["number", "null"],
+          "description": "Cosine similarity score to tribe seed",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "tribe_metadata": {
+          "type": "object",
+          "properties": {
+            "total_users": {
+              "type": "integer",
+              "description": "Total number of users in this tribe",
+              "minimum": 0
+            },
+            "total_reviews": {
+              "type": "integer",
+              "description": "Total number of reviews from this tribe",
+              "minimum": 0
+            },
+            "persona_name": {
+              "type": ["string", "null"],
+              "description": "Persona name for this tribe"
+            },
+            "relaxed_criteria": {
+              "type": "boolean",
+              "description": "Whether this tribe was created with relaxed criteria"
+            }
+          },
+          "required": ["total_users", "total_reviews"],
+          "additionalProperties": true
+        }
+      },
+      "required": ["user_id", "segment_id", "tribe_id", "tribe_metadata"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+
