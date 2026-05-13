@@ -1,0 +1,80 @@
+# =============================================================================
+# Stage 01: Dataset Pull
+# =============================================================================
+
+stage: "01_dataset_pull"
+method: "amazon_review_reader"
+
+# Input/Output Artifacts
+input_artifact: null
+output_artifact: "test_run_for_each_module"  # Sampled dataset: 2000 users, ~10000 reviews
+
+# Hyperparameters
+hyperparameters:
+  # NOTE: Local file inputs are NOT supported. All data must be read from S3.
+  # Do not uncomment or use user_lists_dir or source_data_dir - they are deprecated.
+  output_filename: "amazon_data_samples.json"  # Output filename for the database
+  
+  # S3 Configuration
+  s3:
+    enabled: true  # Must be true - local file inputs are not supported
+    bucket: "amazon-reviews-datastore"  # S3 bucket name (required if enabled=true)
+    region: "us-west-2"  # AWS region (required if enabled=true)
+    # S3 Paths (relative to bucket root)
+    # Sampling source file location in S3 (where full_user_reviews.json is stored)
+    sampling_source_s3_prefix: "dataset_30000_reviews"  # S3 prefix for full_user_reviews.json (required - sampling is always enabled)
+    # Credentials: Uses AWS credentials from environment variables, IAM role, or ~/.aws/credentials
+    # Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables if needed
+  
+  # Sampling configuration (always enabled - samples from existing full_user_reviews.json in S3)
+  sampling:
+    source_file: "full_user_reviews.json"  # Filename of the full dataset in S3 (located at sampling_source_s3_prefix)
+    total_users: 20  # Target number of users in sampled dataset
+    total_reviews: 100  # Target number of reviews in sampled dataset
+    maintain_category_ratios: true  # Maintain original category distribution ratios (same balance as full_user_reviews.json)
+    balanced: true  # Ensure balanced distribution across categories
+    use_all_categories: true  # If true, include ALL categories from data; if false, only use the 7 main categories
+  
+  # Category-specific configuration
+  # Configure how many users and reviews to extract from each category
+  category_config:
+    Clothing_Shoes_and_Jewelry:
+      max_users: null  # null = use all available users from S3 source
+      max_reviews_per_user: null  # null = use all available reviews from S3 source
+      enabled: true
+    
+    Appliances:
+      max_users: null
+      max_reviews_per_user: null
+      enabled: true
+    
+    All_Beauty:
+      max_users: null
+      max_reviews_per_user: null
+      enabled: true
+    
+    Digital_Music:
+      max_users: null
+      max_reviews_per_user: null
+      enabled: true
+    
+    Video_Games:
+      max_users: null
+      max_reviews_per_user: null
+      enabled: true
+    
+    Health_and_Personal_Care:
+      max_users: null
+      max_reviews_per_user: null
+      enabled: true
+    
+    Software:
+      max_users: null
+      max_reviews_per_user: null
+      enabled: true
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Amazon Full Data"
+artifact_type: "dataset"
+job_type: "dataset_pull"

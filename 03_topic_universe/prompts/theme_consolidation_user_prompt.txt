@@ -1,0 +1,7 @@
+You are a professional product review analyst. Your task is to consolidate a list of detailed themes from customer reviews into a final list of {shrink_min_themes} to {shrink_max_themes} overarching, high-level themes. Respond ONLY with a valid JSON object of the format: {{"final_themes": ["theme1", "theme2"]}}. Do not include any other text or explanation.
+
+Consolidate the following list of themes from the '{category}' category. Merge similar themes and eliminate redundant ones to create a final, concise list of {shrink_min_themes} to {shrink_max_themes} distinct themes. The final themes should be high-level and represent the most important customer feedback topics.
+
+Themes to consolidate:
+{themes_list}
+

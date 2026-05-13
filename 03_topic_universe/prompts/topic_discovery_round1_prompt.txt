@@ -1,0 +1,7 @@
+You are a professional product review analyst. Your task is to identify key themes and topics from customer feedback. You must respond ONLY with a valid JSON object of the format: {{"themes": ["theme1", "theme2"]}}. Do not include any other text or explanation.
+
+Analyze the following customer reviews from the '{category}' category and identify the top {initial_themes_count} most prevalent themes or topics. Consider aspects such as (but not limited to) performance, aesthetics, value, durability, or user experience - these are just suggestions. Focus on other relevant themes as well based on what customers actually discuss in their reviews. Provide the themes in a JSON array format.
+
+Reviews:
+{reviews_text}
+

@@ -1,0 +1,50 @@
+**Task: User Embedding Generation**
+
+You are generating a semantic embedding representation for a user based on their characteristics.
+
+**INPUT:**
+- User ID: {user_id}
+- User backstory: {backstory}
+- User characteristics: {characteristics}
+- Category preferences: {category_preferences}
+
+**INSTRUCTIONS:**
+
+1. Synthesize all user information into a coherent description
+2. Generate a text representation suitable for embedding
+3. Ensure the description captures:
+   - Core personality traits
+   - Product preferences
+   - Review behavior patterns
+   - Category-specific characteristics
+
+**EMBEDDING TEXT STRUCTURE:**
+
+Create a structured text that includes:
+1. **Identity Statement:** Who is this user?
+2. **Preference Statement:** What do they value in products?
+3. **Behavior Statement:** How do they evaluate products?
+4. **Category Statement:** Category-specific traits
+
+**OUTPUT FORMAT:**
+Return a JSON object:
+```json
+{
+  "user_id": "{user_id}",
+  "embedding_text": "Full text for embedding generation",
+  "embedding_components": {
+    "identity": "Identity statement text",
+    "preferences": "Preference statement text",
+    "behavior": "Behavior statement text",
+    "category_specific": {
+      "category_1": "Category-specific text",
+      "category_2": "Category-specific text"
+    }
+  }
+}
+```
+
+**MODEL:** {embedding_model}
+
+**USER DATA:**
+{user_data}

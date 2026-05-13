@@ -1,0 +1,54 @@
+stage: "03_topic_universe"
+stage_directory: "03_topic_universe"
+method: "map_reduce_llm"
+
+# Model ID when using AWS Bedrock (OPENAI_BASE_URL set). Used by both map-reduce and shrink scripts.
+# Omit or leave empty to use hyperparameters.model for all endpoints.
+bedrock_model_id: "openai.gpt-oss-120b"
+
+# Input/Output Artifacts
+# input_artifact should be the W&B artifact name from Stage 02 (train set output)
+input_artifact: "train_set_samples_v5:latest"  # From Stage 02 train/test split
+output_artifact: "topic_universe_intermediate_sampled_v5"  # Intermediate (before shrinking)
+
+# For shrink_topics script (02_shrink_topics.py)
+# This should be the output from create_topic_universe (01_create_topic_universe_mapreduce.py)
+shrink_input_artifact: "topic_universe_intermediate_sampled_v5:latest"
+shrink_output_artifact: "topic_universe_final_sampled_v5"  # Final (shrunk) - used in subsequent stages
+
+# Hyperparameters
+hyperparameters:
+  model: "gpt-4o-mini"
+  max_tokens: 200000
+  sample_size_per_round: 1000
+  max_rounds: 10
+  # Process categories (list format - preferred)
+  categories:
+    - "Clothing_Shoes_and_Jewelry"
+    - "Appliances"
+    - "All_Beauty"
+    - "Digital_Music"
+    - "Video_Games"
+    - "Health_and_Personal_Care"
+    - "Software"
+  # Optional: Enable parallel processing (categories run in parallel)
+  parallel: false
+  
+  # Prompt configuration - number of themes to discover/consolidate
+  prompt_config:
+    initial_themes_count: 10  # Number of themes to identify in round 1
+    subsequent_rounds_max_themes: 5  # Maximum new themes per subsequent round
+    shrink_min_themes: 4  # Minimum themes in final consolidated list
+    shrink_max_themes: 20  # Maximum themes in final consolidated list
+
+
+# File Paths and Names
+paths:
+  # Input JSON filename (exact filename expected in W&B artifact from Stage 02)
+  input_json_filename: "train_set_reviews.json"  # From train/test split
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Topic Universe"
+artifact_type: "dataset"
+job_type: "topic_discovery"

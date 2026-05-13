@@ -1,0 +1,17 @@
+Iteration 1 :
+f"Analyze the following customer reviews from the '{category}' category and identify the top 10 most prevalent themes or topics. "
+            f"Consider aspects such as (but not limited to) performance, aesthetics, value, durability, or user experience - these are just suggestions. "
+            f"Focus on other relevant themes as well based on what customers actually discuss in their reviews. "
+            f"Provide the themes in a JSON array format."
+
+Rest of the iterations : 
+            f"Analyze the following Amazon customer reviews from the '{category}' category. "
+            f"Identify new themes or topics that are NOT already in this list: {previous_themes_str}. "
+            f"Cap the number of new themes at 5. If no new themes are found, return an empty array."
+
+Shrink Themes :
+        f"Consolidate the following list of themes from the '{category}' category. "
+        f"Merge similar themes and eliminate redundant ones to create a final, concise list of 4 to 20 distinct themes. "
+        f"The final themes should be high-level and represent the most important customer feedback topics.\n\n"
+        f"Themes to consolidate:\n{themes_list_str}"
+

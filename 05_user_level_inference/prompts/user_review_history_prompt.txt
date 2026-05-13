@@ -1,0 +1,8 @@
+This script compiles user review history from review data.
+No LLM calls are needed - it's a data compilation task.
+
+The script:
+1. Loads reviews from train_set_v4 artifact
+2. Groups reviews by user
+3. Structures review history with metadata (review_id, review_text, rating, category, asin, timestamp)
+4. Validates against schema before saving

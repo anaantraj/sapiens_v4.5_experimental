@@ -1,0 +1,51 @@
+stage: "05_user_inference"
+method: "llm_backstory_extraction"
+
+# Model ID when using AWS Bedrock (OPENAI_BASE_URL set).
+# Omit or leave empty to use hyperparameters.model for all endpoints.
+bedrock_model_id: "openai.gpt-oss-120b"
+
+# Input/Output Artifacts
+# Input artifact from Stage 04 (merged training data with topics)
+# Should match Stage 04 merged_output_artifact_pattern: "{dataset_mode}_set_with_topics_v5"
+input_artifact_reviews: "train_set_with_topics_v5:latest"  # Merged training data from Stage 04
+input_artifact_topics: "review_topics_classified_v5:latest"  # Topic classifications from Stage 04 (optional, not used in processing)
+
+# Review filename in the artifact (required, no fallback)
+# Should match Stage 04 paths.merged_output_filenames.filtered: "{dataset_mode}_set_reviews_with_topics_filtered.json"
+review_filename: "train_set_reviews_with_topics_filtered.json"  # Filename of the merged reviews file in the artifact
+
+# Output artifact name
+output_artifact: "user_backstory_v5"
+
+# For embedding script (02_user_to_embedding.py)
+embedding_input_artifact: "user_backstory_v5:latest"  # Uses output from script 01
+embedding_output_artifact: "user_embedding_v5"
+backstory_filename: "user_overall_characteristics.json"  # Filename of backstories file in the artifact
+
+# For review history script (03_user_to_review_history.py)
+review_history_input_artifact: "train_set_with_topics_v5:latest"  # Use merged training data from Stage 04
+review_history_output_artifact: "user_review_history_v5"
+review_history_output_filename: "user_review_history.json"  # Output filename
+review_history_input_file_patterns:  # File patterns to try (in order of preference)
+  - "train_set_reviews_with_topics.json"
+  - "train_set_reviews.json"
+  - "full_user_reviews.json"
+
+# Hyperparameters
+hyperparameters:
+  model: "o3"
+  embedding_model: "text-embedding-3-small"
+  num_workers: 10  # Increased for better parallel processing
+  user_limit: null  # null = process all users (no limit)
+  reverse_order: true
+  max_context_tokens: 200000
+  token_warning_threshold: 150000
+  max_review_tokens: 180000
+  save_interval: 10
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "User Inference"
+artifact_type: "dataset"
+job_type: "inference"

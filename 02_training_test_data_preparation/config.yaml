@@ -1,0 +1,37 @@
+# =============================================================================
+# Stage 02: Training/Test Data Preparation
+# =============================================================================
+
+stage: "02_train_test_split"
+stage_directory: "02_training_test_data_preparation"
+method: "stratified_user_split"
+
+# Input/Output Artifacts
+# input_artifact should be the W&B artifact name from Stage 01 (e.g., "test_run_for_each_module" or "test_run_for_each_module:latest")
+input_artifact: "test_run_for_each_module:latest"  # W&B artifact name from Stage 01
+output_artifacts:
+  train: "train_set_samples_v5"
+  test: "test_set_samplea_v5"  # Ground Truth
+
+# Hyperparameters
+hyperparameters:
+  train_ratio: 0.8
+  test_ratio: 0.2
+  min_reviews_for_test: 4
+  users_with_2_reviews_percent: 0.16
+  users_with_1_review_percent: 0.04
+
+# File Paths and Names
+paths:
+  # Output filenames for saved artifacts
+  train_output_filename: "train_set_reviews.json"
+  test_output_filename: "test_set_reviews.json"
+  
+  # Input JSON filename (exact filename expected in W&B artifact)
+  input_json_filename: "amazon_data_samples.json"  # Stage 01 output filename
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Processed Data"
+artifact_type: "dataset"
+job_type: "preprocessing"

@@ -1,0 +1,20 @@
+You are a psychological and behavioral analyst. Your goal is to
+read a user's review history{category_context} and identify the core personal
+characteristics that *influence* why they write their reviews.
+
+You must respond ONLY with a valid JSON object. Do not include any other text or explanation.
+
+Analyze the following reviews:
+---
+{all_reviews_text}
+---
+
+Based *only* on the text, write a single paragraph summarizing the
+user's core characteristics{category_instruction}. Focus on their primary motivations,
+values, and the purpose of their writing.
+
+Respond *only* with a valid JSON object:
+{{
+  "influencing_characteristics_summary": "A 2-3 sentence paragraph synthesizing the core factors that motivate this user's reviews."
+}}
+

@@ -1,0 +1,41 @@
+**Task: Review Topic Classification**
+
+You are classifying a product review into predefined topic categories.
+
+**INPUT:**
+- Review text: {review_text}
+- User ID: {user_id}
+- Product ID: {product_id}
+- Category: {category}
+- Available topics: {topic_list}
+
+**INSTRUCTIONS:**
+
+1. Analyze the review content
+2. Classify the review into one or more topics from the available list
+3. Assign probability scores to each relevant topic
+4. Ensure scores sum to approximately 1.0 for top topics
+
+**CLASSIFICATION CRITERIA:**
+- Consider explicit mentions of topic-related keywords
+- Consider implicit references to topics
+- Consider the overall sentiment and context
+
+**OUTPUT FORMAT:**
+Return a JSON object:
+```json
+{
+  "user_id": "{user_id}",
+  "product_id": "{product_id}",
+  "topic_probabilities": {
+    "topic_1": probability,
+    "topic_2": probability,
+    ...
+  },
+  "primary_topics": ["top_topic_1", "top_topic_2", "top_topic_3"],
+  "classification_confidence": float
+}
+```
+
+**REVIEW TO CLASSIFY:**
+{review_text}

@@ -1,0 +1,70 @@
+# =============================================================================
+# Stage 04: Review Topic Classification
+# =============================================================================
+
+stage: "04_review_topic_classification"
+stage_directory: "04_review_topic_classification"
+method: "llm_topic_classification"
+
+# W&B project for this stage (optional). Use old project name if artifacts exist there.
+wandb_project: "SAPIENS"
+
+# Model ID when using AWS Bedrock (OPENAI_BASE_URL set). Used by classification script.
+# Omit or leave empty to use hyperparameters.model for all endpoints.
+bedrock_model_id: "openai.gpt-oss-120b"
+# Model for topic classification when using Bedrock.
+# - For API logprobs (like OpenAI): set this to a Bedrock model that returns logprobs (e.g. openai.gpt-oss-120b on Mantle). We request logprobs and use them when returned.
+# - Claude (anthropic.*): we call Converse; Converse does not return logprobs, so we use JSON topic_probabilities only.
+logprobs_model_id: "openai.gpt-oss-120b"
+
+# Input/Output Artifacts
+# Input artifact names (will use dataset_mode to select correct artifact)
+# These should match Stage 02 output artifact names exactly
+# Note: Stage 02 creates separate artifacts for train and test
+# Format: dict with 'train' and 'test' keys, or pattern string "{dataset_mode}_set_samples_v5:latest"
+input_artifact_reviews:
+  train: "train_set_samples_v5:latest"  # From Stage 02 train split
+  test: "test_set_samplea_v5:latest"     # From Stage 02 test split (note: "samplea" typo matches Stage 02 config)
+# input_artifact_topics should be the W&B artifact name from Stage 03 (final shrunk topic universe)
+input_artifact_topics: "topic_universe_final_sampled_v5:latest"  # Use final (shrunk) topic universe from Stage 03
+output_artifact: "review_topics_classified_v5"
+
+# For merging topics with training data (Script 04)
+# Output artifact name pattern (will use dataset_mode)
+merged_output_artifact_pattern: "{dataset_mode}_set_with_topics_v5"
+
+# For analyzing empty themes (Script 05)
+empty_themes_analysis_output_artifact: "empty_themes_analysis_v4"
+
+# Hyperparameters
+hyperparameters:
+  model: "gpt-4o"  # Use gpt-4o for token probabilities (logprobs support)
+  dataset_mode: "test"  # Set to "test" to process test set, "train" for training set
+  concurrent_requests: 10  # Number of reviews to process in parallel (1 review per LLM call)
+  save_interval: 10
+  parallel: true  # Process categories in parallel (optional)
+  checkpoint_interval: 100  # Save checkpoint every N reviews (for resume functionality)
+
+# File Paths and Names
+paths:
+  # Input JSON filenames (exact filenames expected in W&B artifacts)
+  # These are checked based on dataset_mode
+  input_review_filenames:
+    train:
+      - "train_set_reviews.json"  # Primary filename for train set
+    test:
+      - "test_set_reviews.json"  # Primary filename for test set
+  # Topic universe filename (from Stage 03)
+  input_topic_universe_filename: "topic_universe.json"
+  # Output filename pattern (will use dataset_mode)
+  output_filename_pattern: "review_topics_{dataset_mode}.jsonl"
+  # Output filenames for merge script (merge_topics.py)
+  merged_output_filenames:
+    intermediate: "{dataset_mode}_set_reviews_with_all_topics.json"
+    filtered: "{dataset_mode}_set_reviews_with_topics_filtered.json"
+
+# W&B (Weights & Biases)
+# artifact_type: type of artifact this stage produces when run (dataset | model | result)
+collection: "Extract Ground Truth"
+artifact_type: "dataset"
+job_type: "classification"
